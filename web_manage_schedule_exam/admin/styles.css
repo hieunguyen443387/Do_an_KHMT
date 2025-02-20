@@ -92,7 +92,7 @@ html, body {
 
 /* ***********************CONTENT************************** */
 .tag {
-    height: 145px;
+    height: 120px;
     display: flex;          
     flex-direction: column;  
     justify-content: center; 
@@ -111,6 +111,8 @@ html, body {
     margin-bottom: 15px;
     color: #8B0015;
 }
+
+/* Hiển thị danh mục quản lý */
 
 .manage {
     width: 1275px;  
@@ -147,6 +149,83 @@ html, body {
     color: #0C4DA2;
 }
 
+/* Hiển thị bảng CRUD */
+
+.crud{
+    height: 120px;
+    display: flex; 
+    flex-grow: 1;    
+    border: 1px solid #DFDFDF;       
+    flex-direction: column;  
+    background-color: #FFFFFF;
+    margin: 20px;            
+    padding: 20px;           
+}
+
+.button-group{
+    display: flex;
+    margin: 20px 0 10px;
+    gap: 10px;
+}
+
+.crud #add-button, .crud #import-button {
+    width: 160px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFFFFF;
+    color: #0F6CBF; 
+    text-decoration: none; 
+    border: 2px solid #0F6CBF;
+    cursor: pointer; 
+}
+
+.crud #add-button:hover, .crud #import-button:hover {
+    background-color: #0F6CBF;
+    color: #fff;
+}
+
+.crud-table {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    cursor: pointer;
+    border: 1px solid #EEEEEE;
+}
+
+.crud-table tr td {
+    border: 1px solid #EEEEEE;
+}
+
+.crud-table th, .crud-table td {
+    border: 1px solid #DDDDDD;
+    padding: 10px;
+    text-align: center;
+}
+
+.crud-table thead th {
+    background-color: #0F6CBF;
+    color: white;
+}
+
+.crud-table tbody tr:hover {
+    background-color: #dadada;
+}
+
+.crud-table tbody td:hover {
+    background-color: #ececec;
+}
+
+.crud-table #update-icon {
+    color: #35A7E8;
+    cursor: pointer;
+}
+
+.crud-table #delete-icon {
+    color: red;
+    cursor: pointer;
+}
 
 /* *******************FOOTER*********************** */
 .footer {

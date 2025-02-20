@@ -27,9 +27,49 @@
             <h1>Hệ thống quản lý lịch thi</h1>
         </div>
 
-        <div class="manage">
-            <p>Quản lý</p>
-            
+        <div class="crud">
+            <h3>Danh sách sinh viên:</h3>
+            <div class="button-group">
+                <a id="add-button" href="add_student.html">Thêm sinh viên</a>
+                <button id="import-button"><i class="fa-solid fa-file-import"></i>Chọn file từ máy</button>
+            </div>
+            <table class="crud-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã sinh viên</th>
+                        <th>Tên sinh viên</th>
+                        <th>Lớp</th>
+                        <th>Khoa</th>
+                        <th>Giới tính</th>
+                        <th>Sửa</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>2121</td>
+                        <td>Đoàn Văn A</td>
+                        <td>DCCTCT66_07A</td>
+                        <td>Công nghệ thông tin</td>
+                        <td>Nam</td>
+                        <td id="update-icon"><i class="fa-solid fa-pen-to-square"></i></td>
+                        <td id="delete-icon"><i class="fa-solid fa-trash-can"></i></td>
+                    </tr>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>2122</td>
+                        <td>Đoàn Văn B</td>
+                        <td>DCCTCT66_07A</td>
+                        <td>Công nghệ thông tin</td>
+                        <td>Nam</td>
+                        <td id="update-icon"><i class="fa-solid fa-pen-to-square"></i></td>
+                        <td id="delete-icon"><i class="fa-solid fa-trash-can"></i></td>
+                    </tr>
+                </tbody>
+            </table>
         </div> 
     </div>       
         
