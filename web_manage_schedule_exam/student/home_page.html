@@ -9,20 +9,21 @@
     
 </head>
 <body onload = "myChoice()"> 
-    <div class="container">
 
-        <div class="header">
-            <div class="home">
-                <a href="home_page.html"><h3>Trang đăng kí lịch thi</h3></a>
-            </div>
-            <div class="user" onclick="myFunction()">
-                <span>NGUYỄN TRUNG HIẾU</span>
-                <i class="fa-solid fa-caret-down"></i>
-                <div class="dropdown-content" id="myDropdown">
-                    <a href="#"><i class="fa-solid fa-right-from-bracket"></i>Thoát</a>
-                </div>
+    <div class="header">
+        <div class="home">
+            <a href="home_page.html"><h3>Trang đăng kí lịch thi</h3></a>
+        </div>
+        <div class="user" onclick="myFunction()">
+            <span>NGUYỄN TRUNG HIẾU</span>
+            <i class="fa-solid fa-caret-down"></i>
+            <div class="dropdown-content" id="myDropdown">
+                <a href="#"><i class="fa-solid fa-right-from-bracket"></i>Thoát</a>
             </div>
         </div>
+    </div>
+
+    <div class="container">
 
         <div class="register">
             <h2>Đăng kí lịch thi</h2>
@@ -63,6 +64,10 @@
             </table>
         </div>
 
+        <div class="calender">
+            
+        </div>
+
         <div class="schedule">
             <h3>Danh sách lịch thi đã đăng ký: <span style="color: red;">2 môn</span></h3>
             <table class="schedule-table">
@@ -84,13 +89,13 @@
                 </tbody>
             </table>
             <button class="export-schedule-button"><i class="fa-solid fa-file-export"></i> Xuất phiếu đăng ký</button>
-        </div>        
+        </div>   
+    </div>     
         
-        <div class="footer">
-            <p>Bạn đang đăng nhập với tên <u>NGUYỄN TRUNG HIẾU</u> <a href="#">(Thoát)</a></p>
-        </div>
+    <div class="footer">
+        <p>Bạn đang đăng nhập với tên <u>NGUYỄN TRUNG HIẾU</u> <a href="#">(Thoát)</a></p>
     </div>
-    
+
     <script>
         function myFunction() {
             document.getElementById("myDropdown").classList.toggle("show");

@@ -91,96 +91,62 @@ html, body {
 }
 
 /* ***********************CONTENT************************** */
-.register {
-    width: 1275px;
-    flex-grow: 1;
+.tag {
+    height: 145px;
+    display: flex;          
+    flex-direction: column;  
+    justify-content: center; 
     background-color: #FFFFFF;
-    margin: 20px 20px;
-    padding: 20px;
-    border: 2px solid #EEEEEE; 
+    margin: 20px;            
+    padding: 20px;           
+    border: 1px solid #DFDFDF; 
 }
 
-.register h2 {
+.tag h2 {
     margin-bottom: 15px;
-    color: #343a40;
+    color: #0C4DA2;
 }
 
-.register h3 {
-    padding: 20px 0 10px 0;
-    color: #343a40;
+.tag h1 {
+    margin-bottom: 15px;
+    color: #8B0015;
 }
 
-.course-filter{
-    width: 293px;
-    height: 36px;
-    border: 2px solid;
-    border-color: #6A737B;
-    outline: none;
-}
-
-.schedule {
+.manage {
     width: 1275px;  
-    min-height: 160px;  
+    min-height: 160px;
+    flex-grow: 1;  
     background-color: #FFFFFF;
     margin: 20px 20px;
     padding: 20px;
-    border: 2px solid #EEEEEE;
+    border: 1px solid #DFDFDF;
 }
 
-.schedule-table {
-    width: 100%;
-    border-collapse: collapse;
-    cursor: pointer;
+.manage p {
+    font-size: 30px;
 }
 
-.schedule-table th, .schedule-table td {
-    border: 1px solid #DDDDDD;
-    padding: 10px;
-    text-align: center;
+.manage ul {
+    list-style: none;
+    padding: 40px 0; 
+    margin: 0; 
 }
 
-.schedule-table thead th {
-    background-color: #0F6CBF;
-    color: white;
+.manage ul li {
+    padding-top: 10px;
 }
 
-.schedule-table tbody tr:hover {
-    background-color: #dadada;
-}
-
-.schedule-table tbody td:hover {
-    background-color: #ececec;
-}
-
-.schedule-table .delete-icon {
-    color: red;
-    cursor: pointer;
-}
-
-.schedule .export-schedule-button {
-    margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #FFFFFF;
+.manage ul li a {
+    text-decoration: none;
+    font-size: 30px;
     color: #0F6CBF;
-    border: 2px solid #0F6CBF;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
 }
 
-.schedule .export-schedule-button:hover {
-    background-color: #0F6CBF;
-    color: #FFFFFF;
+.manage ul li a:hover {
+    text-decoration: underline;
+    color: #0C4DA2;
 }
 
-.schedule .export-schedule-button i {
-    font-size: 16px;
-}
-
-#tooltip{
-    display: none;
-}
 
 /* *******************FOOTER*********************** */
 .footer {
