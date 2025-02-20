@@ -1,0 +1,196 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #F7F7F7;
+    padding-bottom: 100px; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+/* *************HEADER*********** */
+.header {
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 55px;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header .home {
+    display: flex;
+    align-items: center;
+}
+
+.header .home a{
+    text-decoration: none;
+    color: #343a40;
+}
+
+.header .user {
+    display: flex;
+    align-items: center;
+    color: #0F6CBF;
+    position: relative;
+    height: 40px;
+}
+
+.header .user:hover {
+    cursor: pointer;
+    color: #094478;
+}
+
+.header .user span {
+    margin-right: 10px; 
+}
+
+.header .user i {
+    margin-right: 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%; 
+    right: 0; 
+    background-color: #FFFFFF;
+    width: 184px;
+    height:44px;
+    border: 1px solid #D9D9D9;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #0F6CBF;
+    color: #FFFFFF;
+}
+
+.show {
+    display: block;
+}
+
+/* ***********************CONTENT************************** */
+.register {
+    width: 1275px;
+    flex-grow: 1;
+    background-color: #FFFFFF;
+    margin: 20px 20px;
+    padding: 20px;
+    border: 2px solid #EEEEEE; 
+}
+
+.register h2 {
+    margin-bottom: 15px;
+    color: #343a40;
+}
+
+.register h3 {
+    padding: 20px 0 10px 0;
+    color: #343a40;
+}
+
+.course-filter{
+    width: 293px;
+    height: 36px;
+    border: 2px solid;
+    border-color: #6A737B;
+    outline: none;
+}
+
+.schedule {
+    width: 1275px;  
+    min-height: 160px;  
+    background-color: #FFFFFF;
+    margin: 20px 20px;
+    padding: 20px;
+    border: 2px solid #EEEEEE;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    cursor: pointer;
+}
+
+.schedule-table th, .schedule-table td {
+    border: 1px solid #DDDDDD;
+    padding: 10px;
+    text-align: center;
+}
+
+.schedule-table thead th {
+    background-color: #0F6CBF;
+    color: white;
+}
+
+.schedule-table tbody tr:hover {
+    background-color: #dadada;
+}
+
+.schedule-table tbody td:hover {
+    background-color: #ececec;
+}
+
+.schedule-table .delete-icon {
+    color: red;
+    cursor: pointer;
+}
+
+.schedule .export-schedule-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #FFFFFF;
+    color: #0F6CBF;
+    border: 2px solid #0F6CBF;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.schedule .export-schedule-button:hover {
+    background-color: #0F6CBF;
+    color: #FFFFFF;
+}
+
+.schedule .export-schedule-button i {
+    font-size: 16px;
+}
+
+#tooltip{
+    display: none;
+}
+
+/* *******************FOOTER*********************** */
+.footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer a {
+    color: white;
+}
