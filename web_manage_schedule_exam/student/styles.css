@@ -92,10 +92,10 @@ html, body {
 
 /* ***********************CONTENT************************** */
 .register {
-    width: 1275px;
+    width: 100%;
+    max-width: 1275px;
     flex-grow: 1;
     background-color: #FFFFFF;
-    margin: 20px 20px;
     padding: 20px;
     border: 2px solid #EEEEEE; 
 }
@@ -119,10 +119,11 @@ html, body {
 }
 
 .schedule {
-    width: 1275px;  
+    width: 100%;
+    max-width: 1275px; 
     min-height: 160px;  
     background-color: #FFFFFF;
-    margin: 20px 20px;
+    margin-top: 20px;
     padding: 20px;
     border: 2px solid #EEEEEE;
 }

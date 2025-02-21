@@ -16,7 +16,6 @@ html, body {
     flex: 1; /* chiếm không gian còn lại giữa header và footer */
     display: flex;
     flex-direction: column;
-    padding: 20px;
 }
 /* *************HEADER*********** */
 .header {
@@ -142,6 +141,7 @@ html, body {
     text-decoration: none;
     font-size: 30px;
     color: #0F6CBF;
+    cursor: pointer;
 }
 
 .manage ul li a:hover {
@@ -158,7 +158,7 @@ html, body {
     border: 1px solid #DFDFDF;       
     flex-direction: column;  
     background-color: #FFFFFF;
-    margin: 20px;            
+    margin: 10px 20px;            
     padding: 20px;           
 }
 
@@ -234,11 +234,16 @@ html, body {
     color: white;
     text-align: center;
     display: flex;
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
-    height: 80px;
+    height: 100px; 
     margin-top: auto;
     width: 100%;
+}
+
+.footer p {
+    margin: 5px 0; 
 }
 
 .footer a {

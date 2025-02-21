@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="manage_add.css">
+    <title>Trang quản lý lịch thi</title>
+    
+</head>
+<body> 
+
+    <div class="container-add">
+
+        <div class="add-logo">
+            <h3>Hệ thống quản lý lịch thi</h3>
+            <h2>Đăng kí tài khoản sinh viên</h2>
+        </div>
+
+        <form action="" class="add-form">
+            <div class="input-form">
+                <input type="text" id="ho_dem" name="ho_dem" placeholder="Họ đệm" class="name" required>
+                <input type="text" id="ten" name="ten" placeholder="Tên" class="name" required>
+                <input type="text" id="msv" name="msv" placeholder="Mã sinh viên" required>
+                <input type="text" id="khoa" name="khoa" placeholder="Khoa" required>
+                <input type="date" id="ngay_sinh" name="ngay_sinh">
+            </div>
+            <div class="gender">
+                <input type="radio" id="male" name="gender" value="Nam" required>
+                <label for="male">Nam</label>
+                <input type="radio" id="female" name="gender" value="Nữ" required>
+                <label for="female">Nữ</label><br>               
+            </div>
+            <br>
+            <button type="submit">Nhập</button>
+        </form>
+
+    </div>       
+        
+    <div class="footer">
+        <p>Bạn đang đăng nhập với tên <u>NGUYỄN TRUNG HIẾU</u> <a href="#">(Thoát)</a></p>
+        <p><a href="home_page.html">Trang chủ</a></p>
+    </div>
+
+</body>
+</html>
