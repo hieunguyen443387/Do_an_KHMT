@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="manage_add.css">
+    <title>Trang quản lý lịch thi</title>
+    
+</head>
+<body> 
+
+    <?php include('header.php'); ?> 
+
+    <div class="container">
+    <?php include('tag.php'); ?>  
+
+        <div class="manage">
+            <p>Quản lý</p>
+            <ul>
+                <li><a href="manage_student.php">Sinh viên</a></li>
+                <li><a href="manage_teacher.php">Giảng viên</a></li>
+                <li><a>Phòng thi</a></li>
+                <li><a>Học phần</a></li>
+                <li><a>Lịch thi</a></li>
+            </ul>
+        </div> 
+    </div> 
+    <?php include('footer.php'); ?> 
+    
+</body>
+</html>

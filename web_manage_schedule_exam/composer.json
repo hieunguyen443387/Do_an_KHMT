@@ -1,0 +1,11 @@
+{
+    "name": "admin/web_manage_schedule_exam",
+    "autoload": {
+        "psr-4": {
+            "Admin\\WebManageScheduleExam\\": "src/"
+        }
+    },
+    "require": {
+        "phpoffice/phpspreadsheet": "^4.0"
+    }
+}

@@ -84,12 +84,10 @@ html, body {
     cursor: pointer; 
 }
 
-
 .container-add .add-form button:hover{
     background-color: #FFFFFF;
     color: #0F6CBF;
 }
-
 
 /* *******************FOOTER*********************** */
 .footer {

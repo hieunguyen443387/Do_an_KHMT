@@ -1,0 +1,29 @@
+<?php
+    include('config.php'); 
+    if (isset($_GET['msv'])) {
+        $msv = $_GET['msv'];
+    
+        $sql_delete = "DELETE FROM sinhvien WHERE msv = '$msv'";
+    
+        if ($conn->query($sql_delete) === TRUE) {
+            
+            header("Location: manage_student.php");
+            exit();
+        } else {
+            echo "Lỗi khi xóa sinh viên: " . $conn->error;
+        }
+    }
+    if (isset($_GET['mgv'])) {
+        $mgv = $_GET['mgv'];
+    
+        $sql_delete = "DELETE FROM giangvien WHERE mgv = '$mgv'";
+    
+        if ($conn->query($sql_delete) === TRUE) {
+            
+            header("Location: manage_teacher.php");
+            exit();
+        } else {
+            echo "Lỗi khi xóa giảng viên: " . $conn->error;
+        }
+    }
+?>

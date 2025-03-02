@@ -45,27 +45,27 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><input type="checkbox" class="choice" style="cursor: pointer;"><div class="tooltip">Lịch thi đã đủ</div></td>
+                        <td><input type="checkbox" class="choice" style="cursor: pointer;"></td>
                         <td>7080506</td>
                         <td>Đồ án KHMT</td>
                         <td>0</td>
-                        <td style="color: red;" class="remain">60</td>
+                        <td class="remain" style="color: red;">60</td>
                         <td>Thứ 2 từ 12:30 - 14:30, Ph HANC501</td>
                     </tr>
                     <tr>
-                        <td><input type="checkbox" class="choice" style="cursor: pointer;"><div class="tooltip">Lịch thi đã đủ</div></td>
+                        <td><input type="checkbox" class="choice" style="cursor: pointer;"></td>
                         <td>7080506</td>
                         <td>Đồ án KHMT</td>
                         <td>60</td>
-                        <td class="remain">0</td>
+                        <td class="remain" style="color: red;">0</td>
                         <td>Thứ 2 từ 12:30 - 14:30, Ph HANC502</td>
                     </tr>
+                    
                 </tbody>
             </table>
-        </div>
 
-        <div class="calender">
-            
+            <button type="submit">Đăng kí</button>
+
         </div>
 
         <div class="schedule">
@@ -119,6 +119,7 @@
                 console.log(`Index: ${index}, Remain: ${remainValue}`);
                 if (remainValue === 0) {
                     checkbox.disabled = true;
+                    remains[index].style.color = "black";
                 }
             });
         }    
