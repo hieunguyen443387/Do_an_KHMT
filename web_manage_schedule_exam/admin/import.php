@@ -43,15 +43,7 @@ if (isset($_POST['import-student-button']) && isset($_FILES['excel_file'])) {
         if (empty($msv)) {
             continue;
         }
-
-        // Xử lý ngày sinh để tạo mật khẩu
-        $mat_khau = '';
-        if (!empty($ngay_sinh)) {
-            $part = explode("-", $ngay_sinh);
-            if (count($part) == 3) {
-                $mat_khau = $part[2] . $part[1] . $part[0];
-            }
-        }
+        
 
         // Kiểm tra xem mã sinh viên đã tồn tại chưa
         $sql_check = "SELECT * FROM sinhvien WHERE msv = ?";
@@ -67,9 +59,24 @@ if (isset($_POST['import-student-button']) && isset($_FILES['excel_file'])) {
         // Thêm vào database
         $sql_sinh_vien = "INSERT INTO sinhvien (msv, ho_dem, ten, ngay_sinh, lop, khoa, gioi_tinh, mat_khau) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql_sinh_vien);
-        $stmt->bind_param("ssssssss", $msv, $ho_dem, $ten, $ngay_sinh, $lop, $khoa, $gioi_tinh, $mat_khau);
-        $stmt->execute();
+
+        if (DateTime::createFromFormat("Y-m-d", $ngay_sinh)) {
+            $dateObject = DateTime::createFromFormat("Y-m-d", $ngay_sinh);
+            $ngay_sinh_sql = $dateObject->format("Y-m-d");
+            $part_sql = (explode("-",$ngay_sinh_sql));
+            $mat_khau_sql = $part_sql[2] . $part_sql[1] . $part_sql[0];
+
+            $stmt->bind_param("ssssssss", $msv, $ho_dem, $ten, $ngay_sinh_sql, $lop, $khoa, $gioi_tinh, $mat_khau_sql);
+            $stmt->execute();
+        } else{
+            $part = (explode("-",$ngay_sinh));
+            $mat_khau = $part[2] . $part[1] . $part[0];
+            $stmt->bind_param("ssssssss", $msv, $ho_dem, $ten, $ngay_sinh, $lop, $khoa, $gioi_tinh, $mat_khau);
+            $stmt->execute();
+        }
+        
     }
+    
 
     header('Location: manage_student.php');
     exit(0);
