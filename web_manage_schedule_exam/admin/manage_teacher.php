@@ -29,11 +29,16 @@
                 <form action="export.php" method="post">
                     <button type="" id="export-button" name="export-teacher-button"><i class="fa-solid fa-file-export"></i>Export</button>
                 </form>
+                <div class="search">
+                    <input type="text" id="search-input" placeholder="Nhập mã giảng viên hoặc tên...">
+                    <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>          
+                </div>
                
             </div>
             <table class="crud-table">
                 <thead>
                     <tr>
+                        <th>Chọn</th>
                         <th>STT</th>
                         <th>Mã giảng viên</th>
                         <th>Tên giảng viên</th>
@@ -58,6 +63,7 @@
                                 $part = (explode("-",$ngay_sinh));
                                 $ngay_sinh_update = $part[2] . "-" . $part[1]. "-" . $part[0];
                                 echo '<tr>';
+                                echo '<td><input type="checkbox"></td>';
                                 echo '<td>' . $stt++ . '</td>';
                                 echo '<td>' . $mgv . '</td>';
                                 echo '<td>' . $row["ho_dem"] . " " . $row["ten"] . '</td>';
@@ -89,6 +95,25 @@
     </div>       
         
     <?php include('footer.php'); ?>  
+
+    <script>
+        document.getElementById("search-input").addEventListener("keyup", function() {
+            let filter = this.value.toLowerCase().trim();
+            let keywords = filter.split(" "); // Tách từ khóa thành từng từ riêng biệt
+            let rows = document.querySelectorAll(".crud-table tbody tr");
+
+            rows.forEach(row => {
+                let mgv = row.cells[2].textContent.toLowerCase();
+                let name = row.cells[3].textContent.toLowerCase();
+
+                // Kiểm tra nếu tất cả từ khóa đều xuất hiện trong mã sinh viên hoặc tên
+                let match = keywords.every(keyword => mgv.includes(keyword) || name.includes(keyword));
+
+                row.style.display = match ? "" : "none"; // Ẩn hoặc hiện hàng
+            });
+        });
+
+    </script>
     
 </body>
 </html>

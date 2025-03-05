@@ -29,11 +29,17 @@
                 <form action="export.php" method="post">
                     <button type="" id="export-button" name="export-student-button"><i class="fa-solid fa-file-export"></i>Export</button>
                 </form>
+                <div class="search">
+                    <input type="text" id="search-input" placeholder="Nhập mã sinh viên hoặc tên...">
+                    <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>          
+                </div>
+
                
             </div>
             <table class="crud-table">
                 <thead>
                     <tr>
+                        <th>Chọn</th>
                         <th>STT</th>
                         <th>Mã sinh viên</th>
                         <th>Tên sinh viên</th>
@@ -46,19 +52,25 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <form action="delete.php" method="post">
 
                     <?php         
                         require "limit_page.php";   
-                        $sql_sinh_vien = "SELECT * FROM sinhvien LIMIT $limit OFFSET $offset";           
+                        
+                        $sql_sinh_vien = "SELECT * FROM sinhvien LIMIT $limit OFFSET $offset";
                         $result_sinh_vien = $conn->query($sql_sinh_vien);
+                        
                         if ($result_sinh_vien->num_rows > 0) {
                             $stt = $offset + 1;
+                            $bar = 1;
                             while($row = $result_sinh_vien->fetch_assoc()) {
                                 $msv = $row["msv"];
                                 $ngay_sinh = $row['ngay_sinh'];
                                 $part = (explode("-",$ngay_sinh));
                                 $ngay_sinh_update = $part[2] . "-" . $part[1]. "-" . $part[0];
+
                                 echo '<tr>';
+                                echo '<td><input type="checkbox" name="select_all[]" value="' . $msv . '"></td>';
                                 echo '<td>' . $stt++ . '</td>';
                                 echo '<td>' . $msv . '</td>';
                                 echo '<td>' . $row["ho_dem"] . " " . $row["ten"] . '</td>';
@@ -71,17 +83,25 @@
                                 echo '</tr>';  
                             }
                         } else {
-                            echo "0 results";
+                            echo "Chưa có sinh viên";
                         }                        
                     ?>
 
                 </tbody>
 
             </table>
-            <!-- <div class="selected-box">
-                <span> Chọn tất cả <input type="checkbox"></span>
-                <i class="fa-solid fa-trash-can"></i>
-            </div> -->
+            <?php
+                $sql_sinh_vien = "SELECT * FROM sinhvien";
+                $result_sinh_vien = $conn->query($sql_sinh_vien);
+                
+                if ($result_sinh_vien->num_rows > 0) {
+                    echo '<div class="selected-box">
+                            <span> Chọn tất cả <input type="checkbox" onClick="toggle(this)" /></span>
+                                <button type="submit" name="delete_multiple_student"><i class="fa-solid fa-trash-can"></i></button>
+                            </form>
+                        </div>';
+                }
+            ?>
             <?php 
                 $sql_trang = "SELECT COUNT(*) AS total FROM sinhvien ";
                 $result_trang = $conn->query($sql_trang);
@@ -91,6 +111,32 @@
     </div>       
         
     <?php include('footer.php'); ?>  
+
+    <script>
+        document.getElementById("search-input").addEventListener("keyup", function() {
+            let filter = this.value.toLowerCase().trim();
+            let keywords = filter.split(" "); // Tách từ khóa thành từng từ riêng biệt
+            let rows = document.querySelectorAll(".crud-table tbody tr");
+
+            rows.forEach(row => {
+                let msv = row.cells[2].textContent.toLowerCase();
+                let name = row.cells[3].textContent.toLowerCase();
+
+                // Kiểm tra nếu tất cả từ khóa đều xuất hiện trong mã sinh viên hoặc tên
+                let match = keywords.every(keyword => msv.includes(keyword) || name.includes(keyword));
+
+                row.style.display = match ? "" : "none"; // Ẩn hoặc hiện hàng
+            });
+        });
+
+        function toggle(source) {
+            checkboxes = document.getElementsByName('select_all[]');
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+            checkboxes[i].checked = source.checked;
+            }
+        }
+
+    </script>
     
 </body>
 </html>
