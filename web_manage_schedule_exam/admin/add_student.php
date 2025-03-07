@@ -64,7 +64,6 @@
                 <input type="text" id="ho_dem" name="ho_dem" placeholder="Họ đệm" class="name" required>
                 <input type="text" id="ten" name="ten" placeholder="Tên" class="name" required>
                 <input type="text" id="msv" name="msv" placeholder="Mã sinh viên" required>
-                <input type="text" id="khoa" name="khoa" placeholder="Khoa" required>
                 <input type="text" id="lop" name="lop" placeholder="Lớp" required>
                 <input type="date" id="ngay_sinh" name="ngay_sinh">
             </div>

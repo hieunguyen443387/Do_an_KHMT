@@ -16,3 +16,4 @@
         ?></u> <a href="logout.php">(Thoát)</a></p>
     <p><a href="home_admin.php">Trang chủ</a></p>
 </div>
+<script src="search.js"></script>

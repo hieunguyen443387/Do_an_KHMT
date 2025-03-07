@@ -16,20 +16,24 @@
         <?php include('tag.php'); ?>
 
         <div class="crud">
-            <h3>Danh sách sinh viên:</h3>
+            <h3>Danh sách khoa:</h3>
             <div class="button-group">
-                <a id="add-button" href="add_teacher.php">Thêm giảng viên</a>
+                <a id="add-button" href="add_faculty.php">Thêm khoa</a>
                 <form action="import.php" method="post" enctype="multipart/form-data" class="upload-form">
                     <label for="file-upload" class="custom-file-upload">
                         Choose File
                     </label>
-                    <button type="submit" id="import-button" name="import-teacher-button">Upload</button>
+                    <button type="submit" id="import-button" name="import-faculty-button">Upload</button>
                     <input id="file-upload" type="file" name="excel_file" accept=".xls,.xlsx" required>
                 </form>
+                <form action="export.php" method="post">
+                    <button type="" id="export-button" name="export-faculty-button"><i class="fa-solid fa-file-export"></i>Export</button>
+                </form>
                 <div class="search">
-                    <input type="text" id="search-input" placeholder="Nhập mã giảng viên hoặc tên...">
+                    <input type="text" id="search-input" placeholder="Nhập mã khoa hoặc tên khoa...">
                     <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>          
                 </div>
+
                
             </div>
             <table class="crud-table">
@@ -37,11 +41,8 @@
                     <tr>
                         <th>Chọn</th>
                         <th>STT</th>
-                        <th>Mã giảng viên</th>
-                        <th>Tên giảng viên</th>
-                        <th>Ngày sinh</th>
-                        <th>Khoa</th>
-                        <th>Giới tính</th>
+                        <th>Mã khoa</th>
+                        <th>Tên khoa</th>
                         <th>Sửa</th>
                         <th>Xóa</th>
                     </tr>
@@ -51,27 +52,26 @@
 
                     <?php         
                         require "limit_page.php";   
-                        $sql_giang_vien = "SELECT * FROM giangvien LIMIT $limit OFFSET $offset";           
-                        $result_giang_vien = $conn->query($sql_giang_vien);
-                        if ($result_giang_vien->num_rows > 0) {
+                        
+                        $sql_khoa = "SELECT * FROM khoa LIMIT $limit OFFSET $offset";
+                        $result_khoa = $conn->query($sql_khoa);
+                        
+                        if ($result_khoa->num_rows > 0) {
                             $stt = $offset + 1;
-                            while($row = $result_giang_vien->fetch_assoc()) {
-                                $mgv = $row["mgv"];
-                                $ngay_sinh = $row['ngay_sinh'];
+                            while($row = $result_khoa->fetch_assoc()) {
+                                $ma_khoa = $row["ma_khoa"];
+
                                 echo '<tr>';
-                                echo '<td><input type="checkbox" name="select_all[]" value="' . $mgv . '"></td>';
+                                echo '<td><input type="checkbox" name="select_all[]" value="' . $ma_khoa . '"></td>';
                                 echo '<td>' . $stt++ . '</td>';
-                                echo '<td>' . $mgv . '</td>';
-                                echo '<td>' . $row["ho_dem"] . " " . $row["ten"] . '</td>';
-                                echo '<td>' . $ngay_sinh . '</td>';
-                                echo '<td>' . $row["khoa"] . '</td>';
-                                echo '<td>' . $row["gioi_tinh"] . '</td>';
-                                echo '<td id="update-icon"><a href="update_teacher.php?mgv=' . $mgv . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
-                                echo '<td id="delete-icon"><a href="delete.php?mgv=' . $mgv . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
+                                echo '<td>' . $ma_khoa . '</td>';
+                                echo '<td>' . $row["ten_khoa"] . '</td>';
+                                echo '<td id="update-icon"><a href="update_faculty.php?ma_khoa=' . $ma_khoa . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
+                                echo '<td id="delete-icon"><a href="delete.php?ma_khoa=' . $ma_khoa . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
                                 echo '</tr>';  
                             }
                         } else {
-                            echo "Chưa có giảng viên";
+                            echo "Chưa có khoa";
                         }                        
                     ?>
 
@@ -79,16 +79,16 @@
 
             </table>
             <?php
-                if ($result_giang_vien->num_rows > 0) {
+                if ($result_khoa->num_rows > 0) {
                     echo '<div class="selected-box">
                             <span> Chọn tất cả <input type="checkbox" onClick="toggle(this)" /></span>
-                                <button type="submit" name="delete_multiple_teacher"><i class="fa-solid fa-trash-can"></i></button>
+                                <button type="submit" name="delete_multiple_student"><i class="fa-solid fa-trash-can"></i></button>
                             </form>
                         </div>';
                 }
             ?>
             <?php 
-                $sql_trang = "SELECT COUNT(*) AS total FROM giangvien ";
+                $sql_trang = "SELECT COUNT(*) AS total FROM khoa ";
                 $result_trang = $conn->query($sql_trang);
                 require "pagination.php"; 
             ?>  

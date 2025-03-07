@@ -91,9 +91,6 @@
 
             </table>
             <?php
-                $sql_sinh_vien = "SELECT * FROM sinhvien";
-                $result_sinh_vien = $conn->query($sql_sinh_vien);
-                
                 if ($result_sinh_vien->num_rows > 0) {
                     echo '<div class="selected-box">
                             <span> Chọn tất cả <input type="checkbox" onClick="toggle(this)" /></span>
@@ -111,32 +108,6 @@
     </div>       
         
     <?php include('footer.php'); ?>  
-
-    <script>
-        document.getElementById("search-input").addEventListener("keyup", function() {
-            let filter = this.value.toLowerCase().trim();
-            let keywords = filter.split(" "); // Tách từ khóa thành từng từ riêng biệt
-            let rows = document.querySelectorAll(".crud-table tbody tr");
-
-            rows.forEach(row => {
-                let msv = row.cells[2].textContent.toLowerCase();
-                let name = row.cells[3].textContent.toLowerCase();
-
-                // Kiểm tra nếu tất cả từ khóa đều xuất hiện trong mã sinh viên hoặc tên
-                let match = keywords.every(keyword => msv.includes(keyword) || name.includes(keyword));
-
-                row.style.display = match ? "" : "none"; // Ẩn hoặc hiện hàng
-            });
-        });
-
-        function toggle(source) {
-            checkboxes = document.getElementsByName('select_all[]');
-            for(var i=0, n=checkboxes.length;i<n;i++) {
-            checkboxes[i].checked = source.checked;
-            }
-        }
-
-    </script>
     
 </body>
 </html>

@@ -320,6 +320,11 @@ html, body {
     cursor: pointer;
 }
 
+.crud-table #view-icon a {
+    color: #35A7E8;
+    cursor: pointer;
+}
+
 .crud .pagination{
     display: flex;
     flex-direction: row; 
