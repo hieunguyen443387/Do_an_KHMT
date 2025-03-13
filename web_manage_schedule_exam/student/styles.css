@@ -39,25 +39,34 @@ html, body {
     color: #343a40;
 }
 
+.header .user a {
+    display: flex;
+    align-items: center;
+    color: #0F6CBF;
+    position: relative;
+    height: 40px;
+    margin-right: 10px; 
+    text-decoration: none;
+}
+
+.header .user a:hover {
+    cursor: pointer;
+    color: #094478;
+}
+
 .header .user {
     display: flex;
     align-items: center;
     color: #0F6CBF;
     position: relative;
     height: 40px;
+    margin-right: 10px; 
+    text-decoration: none;
 }
 
-.header .user:hover {
+.header .user :hover {
     cursor: pointer;
     color: #094478;
-}
-
-.header .user span {
-    margin-right: 10px; 
-}
-
-.header .user i {
-    margin-right: 10px;
 }
 
 .dropdown-content {
@@ -72,6 +81,10 @@ html, body {
     z-index: 1;
 }
 
+.dropdown-content:hover {
+    background-color: #0F6CBF;
+}
+
 .dropdown-content a {
     float: none;
     color: black;
@@ -82,7 +95,6 @@ html, body {
 }
 
 .dropdown-content a:hover {
-    background-color: #0F6CBF;
     color: #FFFFFF;
 }
 

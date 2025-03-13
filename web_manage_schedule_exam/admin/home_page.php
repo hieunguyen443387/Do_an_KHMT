@@ -27,9 +27,9 @@
             <ul>
                 <li><a href="manage_student.php">Sinh viên</a></li>
                 <li><a href="manage_teacher.php">Giảng viên</a></li>
-                <li><a>Phòng thi</a></li>
-                <li><a>Học phần</a></li>
-                <li><a>Lịch thi</a></li>
+                <li><a href="manage_class.php">Phòng thi</a></li>
+                <li><a href="manage_course.php">Học phần</a></li>
+                <li><a href="manage_schedule.php">Lịch thi</a></li>
             </ul>
         </div> 
     </div> 

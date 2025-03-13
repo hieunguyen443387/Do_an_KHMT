@@ -87,7 +87,7 @@
                 </select>
                 <br>
                 <br>
-                <select name="ma_phong" id="ma_phong"class="filter">
+                <select name="ma_phong" id="ma_phong" class="filter">
                     <option value="">Chọn phòng thi</option>
                     <?php
                         $sql_phong_thi = "SELECT * FROM phongthi";

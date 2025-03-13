@@ -2,7 +2,7 @@
     include('config.php'); 
     session_start();
     if (!isset($_SESSION['id_admin'])) {
-        header("Location: ../home_admin/home_admin.php");
+        header("Location: ../admin/login.php");
         exit();
     }
 
@@ -43,7 +43,6 @@
                 ?>
 
             </span>
-            <i class="fa-solid fa-caret-down"></i>
             <div class="dropdown-content" id="myDropdown">
                 <a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i>Thoát</a>
             </div>
