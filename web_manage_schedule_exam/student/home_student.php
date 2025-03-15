@@ -1,32 +1,3 @@
-<?php 
-include('config.php'); 
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $ma_lich_thi_list = $_POST['ma_lich_thi']; // Lấy tất cả mã lịch thi được chọn
-        foreach ($ma_lich_thi_list as $ma_lich_thi) {
-            // Thực hiện xử lý từng mã lịch thi
-        }
-        $msv = $_POST['msv'];
-
-        $sql_lich_thi = "SELECT * FROM dangkythi WHERE ma_lich_thi = '$ma_lich_thi' AND msv = '$msv'";
-        $result_lich_thi = $conn->query($sql_lich_thi);
-        if ($result_lich_thi->num_rows > 0 ) {
-                    echo "Đã tồn tại";
-        }
-        else {
-
-            // Chèn dữ liệu vào bảng
-            $sql_lich_thi = "INSERT INTO dangkythi (ma_lich_thi, msv) 
-            VALUES ('$ma_lich_thi', '$msv')";
-            
-
-            if ($conn->query($sql_lich_thi) === FALSE ) {
-                echo "Error: " . $sql_lich_thi . "<br>" . $conn->error;
-            }
-        }
-    }
-
-?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -60,93 +31,106 @@ include('config.php');
             </select>
 
             <h3>Danh sách lịch thi:</h3>
-            
-            <table class="schedule-table">
-                <thead>
-                    <tr>
-                        <th>Chọn</th>
-                        <th>Mã MH</th>
-                        <th>Tên môn học</th>
-                        <th>Số lượng</th>
-                        <th>Còn lại</th>
-                        <th>Lịch thi</th>
-                    </tr>
-                </thead>
-                <form action="" method="post">
-                <tbody>
-                    
-                    
+
+            <form action="course_ registration.php" method="post">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Chọn</th>
+                            <th>Mã MH</th>
+                            <th>Tên môn học</th>
+                            <th>Số lượng</th>
+                            <th>Còn lại</th>
+                            <th>Lịch thi</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
                         <?php         
                         
-                        echo '<input type="hidden" id="msv" name="msv" value="'. $msv . '">';
+                            echo '<input type="hidden" id="msv" name="msv" value="'. $msv . '">';
 
-                        $sql_lich_thi = "SELECT * FROM lichthi";
-                        $result_lich_thi = $conn->query($sql_lich_thi);
-                        
-                        if ($result_lich_thi->num_rows > 0) {
-                            while($row = $result_lich_thi->fetch_assoc()) {
-                                $ma_phong = $row["ma_phong"];
-                                $ma_lich_thi = $row["ma_lich_thi"];
-                                $ma_hoc_phan = $row["ma_hoc_phan"];
-                                $ngay_thi = $row["ngay_thi"];
-                                $part = (explode("-",$ngay_thi));
-                                $ngay_thi_update = $part[2] . "-" . $part[1]. "-" . $part[0];
-                                $gio_ket_thuc = $row["gio_ket_thuc"];
-                                $gio_bat_dau = $row["gio_bat_dau"];
-                                echo '<tr>';
-                                echo '<td><input type="checkbox" class="choice" name="ma_lich_thi[]" value="'. $ma_lich_thi .'" style="cursor: pointer;"></td>';
-                                echo '<td>' . $ma_hoc_phan . '</td>';
-                                $sql_hoc_phan = "SELECT * FROM hocphan where ma_hoc_phan = '$ma_hoc_phan'";
-                                $result_hoc_phan = $conn->query($sql_hoc_phan);
-                                
-                                if ($result_hoc_phan->num_rows > 0) {
-                                    while($row = $result_hoc_phan->fetch_assoc()) {
-                                        echo '<td>' . $row["ten_hoc_phan"] . '</td>';
-                                    }
-                                }
-
-                                $sql_phong_thi = "SELECT * FROM phongthi";
-                                $result_phong_thi = $conn->query($sql_phong_thi);
-                                
-                                if ($result_phong_thi->num_rows > 0) {
-                                    while($row = $result_phong_thi->fetch_assoc()) {
-                                        $suc_chua = $row["suc_chua"];
-                                        echo '<td>' . $suc_chua . '</td>';
-                                    }
-                                }
-
-                                $sql = "SELECT COUNT(*) AS so_luong FROM dangkythi WHERE ma_lich_thi = '$ma_lich_thi'";
-                                $result = $conn->query($sql);
+                            $sql_lich_thi = "SELECT * FROM lichthi";
+                            $result_lich_thi = $conn->query($sql_lich_thi);
                             
-                                if ($result->num_rows > 0) {
-                                    $row = $result->fetch_assoc();
-                                    $so_luong = $row['so_luong'];
-                                } else {
-                                    $so_luong = 0; 
-                                }
+                            if ($result_lich_thi->num_rows > 0) {
+                                while($row = $result_lich_thi->fetch_assoc()) {
+                                    $ma_phong = $row["ma_phong"];
+                                    $ma_lich_thi = $row["ma_lich_thi"];
+                                    $ma_hoc_phan = $row["ma_hoc_phan"];
+                                    $ngay_thi = $row["ngay_thi"];
+                                    $part = (explode("-",$ngay_thi));
+                                    $ngay_thi_update = $part[2] . "-" . $part[1]. "-" . $part[0];
+                                    $gio_ket_thuc = $row["gio_ket_thuc"];
+                                    $gio_bat_dau = $row["gio_bat_dau"];
+                                    echo '<tr>';
+                                    echo '<td><input type="checkbox" class="choice" name="ma_lich_thi[]" value="'. $ma_lich_thi .'" style="cursor: pointer;"></td>';
+                                    echo '<td>' . $ma_hoc_phan . '</td>';
 
-                                $con_lai = $suc_chua - $so_luong;
+                                    //Truy vấn tên học phần
+                                    $sql_hoc_phan = "SELECT * FROM hocphan where ma_hoc_phan = '$ma_hoc_phan'";
+                                    $result_hoc_phan = $conn->query($sql_hoc_phan);
+                                    
+                                    if ($result_hoc_phan->num_rows > 0) {
+                                            $row = $result_hoc_phan->fetch_assoc();
+                                            echo '<td>' . $row["ten_hoc_phan"] . '</td>';
+                                    }
+
+                                    $sql_phong_thi = "SELECT * FROM phongthi";
+                                    $result_phong_thi = $conn->query($sql_phong_thi);
+                                    
+                                    if ($result_phong_thi->num_rows > 0) {
+                                            $row = $result_phong_thi->fetch_assoc();
+                                            $suc_chua = $row["suc_chua"];
+                                            echo '<td>' . $suc_chua . '</td>';
+                                    }
+
+                                    //Đếm số lượng sinh viên đã đăny kí lịch thi
+                                    $sql = "SELECT COUNT(*) AS so_luong FROM dangkythi WHERE ma_lich_thi = '$ma_lich_thi'";
+                                    $result = $conn->query($sql);
                                 
-                                echo '<td class="remain" style="color: red;">' . $con_lai . '</td>';
+                                    if ($result->num_rows > 0) {
+                                        $row = $result->fetch_assoc();
+                                        $so_luong = $row['so_luong'];
+                                    } else {
+                                        $so_luong = 0; 
+                                    }
 
-                                echo '<td>' . $ngay_thi_update . ' từ ' . $gio_bat_dau . ' - ' . $gio_ket_thuc . ', Ph '. $ma_phong .'</td>';
-                                echo '</tr>';  
-                            }
-                        } else {
-                            echo "Chưa có lịch thi";
-                        }                        
-                    ?>
-                        
-                </tbody>
-            </table>
+                                    //Tính số lượng còn lại
+                                    $con_lai = $suc_chua - $so_luong;
+                                    
+                                    echo '<td class="remain" style="color: red;">' . $con_lai . '</td>';
 
-            <button type="submit">Đăng kí</button>
-        </form>
+                                    echo '<td>' . $ngay_thi_update . ' từ ' . $gio_bat_dau . ' - ' . $gio_ket_thuc . ', Ph '. $ma_phong .'</td>';
+                                    echo '</tr>';  
+
+                                }
+                            } else {
+                                echo "Chưa có lịch thi";
+                            }                        
+                        ?>         
+                    </tbody>
+                </table>
+
+                <button type="submit">Đăng kí</button>
+            </form>
         </div>
         
 
         <div class="schedule">
-            <h3>Danh sách lịch thi đã đăng ký: <span style="color: red;">2 môn</span></h3>
+            <h3>Danh sách lịch thi đã đăng ký: <span style="color: red;">
+                <?php //Truy vấn số môn đã đăng kí
+                    $sql = "SELECT COUNT(*) AS so_luong FROM dangkythi WHERE msv = '$msv'";
+                    $result = $conn->query($sql);
+                
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        echo $row['so_luong'] ;
+                        
+                    } else {
+                        $so_luong = 0; 
+                    } 
+                    ?> 
+            môn</span></h3>
             <table class="schedule-table">
                 <thead>
                     <tr>
@@ -157,12 +141,51 @@ include('config.php');
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>7080506</td>
-                        <td>Đồ án KHMT</td>
-                        <td>Thứ 2 từ 12:30 - 14:30, Ph HANC501</td>
-                        <td>17/12/2024 17:09:34</td>
-                    </tr>
+                    <?php         
+
+                        $sql_dang_ki_thi = "SELECT * FROM dangkythi";
+                        $result_dang_ki_thi = $conn->query($sql_dang_ki_thi);
+                        
+                        if ($result_dang_ki_thi->num_rows > 0) {
+                            while($row = $result_dang_ki_thi->fetch_assoc()) {
+                                echo '<tr>';
+                                $ma_lich_thi = $row["ma_lich_thi"];
+                                $ngay_dang_ky = $row["ngay_dang_ky"];
+
+                                //Truy vấn mã học phần
+                                $sql_lich_thi = "SELECT * FROM lichthi where ma_lich_thi = '$ma_lich_thi'";
+                                $result_lich_thi = $conn->query($sql_lich_thi);
+                                
+                                if ($result_lich_thi->num_rows > 0) {
+                                    while($row = $result_lich_thi->fetch_assoc()) {
+                                        $ngay_thi = $row["ngay_thi"];
+                                        $part = (explode("-",$ngay_thi));
+                                        $ngay_thi_update = $part[2] . "-" . $part[1]. "-" . $part[0];
+                                        $gio_ket_thuc = $row["gio_ket_thuc"];
+                                        $gio_bat_dau = $row["gio_bat_dau"];
+                                        $ma_hoc_phan = $row['ma_hoc_phan'];
+                                        echo '<td>' . $row['ma_hoc_phan'] . '</td>';
+
+                                        //Truy vấn tên học phần
+                                        $sql_hoc_phan = "SELECT * FROM hocphan where ma_hoc_phan = '$ma_hoc_phan'";
+                                        $result_hoc_phan = $conn->query($sql_hoc_phan);
+                                        
+                                        if ($result_hoc_phan->num_rows > 0) {
+                                            $row = $result_hoc_phan->fetch_assoc();
+                                                echo '<td>' . $row["ten_hoc_phan"] . '</td>';
+                                        }
+
+                                        //Hiển thị lịch thi
+                                        echo '<td>' . $ngay_thi_update . ' từ ' . $gio_bat_dau . ' - ' . $gio_ket_thuc . ', Ph '. $ma_phong .'</td>';
+                                    }
+                                }                                
+                                echo '<td>' . $ngay_dang_ky . '</td>';
+                                echo '</tr>'; 
+                            }
+                        } else {
+                            echo "Chưa có lịch thi";
+                        }                         
+                    ?>    
                 </tbody>
             </table>
             <button class="export-schedule-button"><i class="fa-solid fa-file-export"></i> Xuất phiếu đăng ký</button>
@@ -172,6 +195,7 @@ include('config.php');
     <?php include('footer.php'); ?> 
 
     <script>
+        // Hiển thị dropdown đăng xuất
         function myFunction() {
             document.getElementById("myDropdown").classList.toggle("show");
         }
@@ -185,6 +209,7 @@ include('config.php');
             }
         };
 
+        // Kiểm tra xem phòng đã đủ chưa
         function myChoice() {
             let checkboxes = document.querySelectorAll(".choice");
             let remains = document.querySelectorAll(".remain");

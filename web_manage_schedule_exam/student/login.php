@@ -49,7 +49,7 @@ $conn->close();
         <form action="" class="login-form" method="post">
             <div class="input-form">
                 <input type="text" id="msv" name="msv" placeholder="Tên đăng nhập (username)" required>
-                <input type="text" id="mat_khau" name="mat_khau" placeholder="Mật khẩu" required>
+                <input type="password" id="mat_khau" name="mat_khau" placeholder="Mật khẩu" required>
             </div>
             <br>
             <button type="submit">Đăng nhập</button>
