@@ -29,14 +29,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $result_check_conflict = $conn->query($sql_check_conflict);
             if ($result_check_conflict->num_rows > 0) {
-                continue;
+                $row_conflict = $result_check_conflict->fetch_assoc();
+                $ma_lich_thi_old = $row_conflict['ma_lich_thi'];
+
+                // Cập nhật dữ liệu vào bảng
+                $sql_update = "UPDATE dangkythi set ma_lich_thi = '$ma_lich_thi' WHERE ma_lich_thi = '$ma_lich_thi_old' and msv = '$msv'"; 
+
+                if ($conn->query($sql_update) === FALSE) {
+                    echo "Lỗi cập nhật: " . $conn->error;
+                } 
+                
+            } else{
+                // Nếu không có xung đột, tiến hành đăng ký lịch thi
+                $sql_insert = "INSERT INTO dangkythi (ma_lich_thi, msv) VALUES ('$ma_lich_thi', '$msv')";
+                if ($conn->query($sql_insert) === FALSE) {
+                    echo "Lỗi: " . $sql_insert . "<br>" . $conn->error;
+                }
             }
 
-            // Nếu không có xung đột, tiến hành đăng ký lịch thi
-            $sql_insert = "INSERT INTO dangkythi (ma_lich_thi, msv) VALUES ('$ma_lich_thi', '$msv')";
-            if ($conn->query($sql_insert) === FALSE) {
-                echo "Lỗi: " . $sql_insert . "<br>" . $conn->error;
-            }
         }
     }
 

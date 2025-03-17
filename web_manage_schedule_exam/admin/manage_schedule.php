@@ -27,7 +27,7 @@
                     <input id="file-upload" type="file" name="excel_file" accept=".xls,.xlsx" required>
                 </form>
                 <div class="search">
-                    <input type="text" id="search-input" placeholder="Nhập mã học phần hoặc tên học phần...">
+                    <input type="text" id="search-input" onkeyup="searchFunction()" placeholder="Nhập mã học phần hoặc tên học phần...">
                     <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>          
                 </div>
 
@@ -46,7 +46,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <form action="delete.php" method="post">
 
                     <?php         
                         require "limit_page.php";   
@@ -96,6 +95,7 @@
                     ?>
 
                 </tbody>
+                </form>
 
             </table>
             <?php 
@@ -107,6 +107,6 @@
     </div>       
         
     <?php include('footer.php'); ?>  
-    
+
 </body>
 </html>

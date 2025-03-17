@@ -1,15 +1,26 @@
-document.getElementById("search-input").addEventListener("keyup", function() {
-    let filter = this.value.toLowerCase().trim();
-    let keywords = filter.split(" "); // Tách từ khóa thành từng từ riêng biệt
-    let rows = document.querySelectorAll(".crud-table tbody tr");
+function searchFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("search-input");
+    filter = input.value.toUpperCase();
+    table = document.querySelector(".crud-table");
+    tr = table.getElementsByTagName("tr");
 
-    rows.forEach(row => {
-        let msv = row.cells[2].textContent.toLowerCase();
-        let name = row.cells[3].textContent.toLowerCase();
+    for (i = 1; i < tr.length; i++) {  // Bỏ qua hàng tiêu đề
+        let found = false;
+        let tds = tr[i].getElementsByTagName("td");
 
-        // Kiểm tra nếu tất cả từ khóa đều xuất hiện trong mã sinh viên hoặc tên
-        let match = keywords.every(keyword => msv.includes(keyword) || name.includes(keyword));
-
-        row.style.display = match ? "" : "none"; // Ẩn hoặc hiện hàng
-    });
-}); 
+        if (tds.length > 0) {  // Kiểm tra nếu hàng có dữ liệu
+            for (let j = 0; j < tds.length; j++) {
+                td = tds[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            tr[i].style.display = found ? "" : "none";
+        }
+    }
+}

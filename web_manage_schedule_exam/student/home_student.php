@@ -16,7 +16,7 @@
 
         <div class="register">
             <h2>Đăng kí lịch thi</h2>
-            <select name="ma_hoc_phan" id="ma_hoc_phan" class="course-filter">
+            <select name="ma_hoc_phan" class="course-filter" onchange="filterFunction()">
                 <option value="">Chọn học phần</option>
                 <?php
                     $sql_hoc_phan = "SELECT * FROM hocphan";
@@ -24,7 +24,7 @@
 
                     if ($result_hoc_phan->num_rows > 0) {
                         while($row = $result_hoc_phan->fetch_assoc()) {
-                            echo '<option value="' . $row['ma_hoc_phan'] . '">' . $row['ten_hoc_phan'] . '</option>';
+                            echo '<option value="' . $row['ma_hoc_phan'] . '" id="ma_hoc_phan">' . $row['ten_hoc_phan'] . '</option>';
                         }
                     }
                 ?>
@@ -223,7 +223,27 @@
                 }
             });
         }    
-        
+
+        function filterFunction() {
+        var select, filter, table, tr, td, i, txtValue;
+        select = document.querySelector(".course-filter"); 
+        filter = select.value.toUpperCase(); 
+        table = document.querySelector(".schedule-table");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) {
+            let td = tr[i].getElementsByTagName("td")[1]; 
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (filter === "" || txtValue.toUpperCase() === filter) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
     </script>
 </body>
 </html>
