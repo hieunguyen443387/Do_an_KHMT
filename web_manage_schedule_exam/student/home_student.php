@@ -164,6 +164,7 @@
                                         $gio_ket_thuc = $row["gio_ket_thuc"];
                                         $gio_bat_dau = $row["gio_bat_dau"];
                                         $ma_hoc_phan = $row['ma_hoc_phan'];
+                                        $ma_lich_thi = $row['ma_lich_thi'];
                                         echo '<td>' . $row['ma_hoc_phan'] . '</td>';
 
                                         //Truy vấn tên học phần
@@ -176,7 +177,7 @@
                                         }
 
                                         //Hiển thị lịch thi
-                                        echo '<td>' . $ngay_thi_update . ' từ ' . $gio_bat_dau . ' - ' . $gio_ket_thuc . ', Ph '. $ma_phong .'</td>';
+                                        echo '<td data-value="'. $ma_lich_thi .'" >' . $ngay_thi_update . ' từ ' . $gio_bat_dau . ' - ' . $gio_ket_thuc . ', Ph '. $ma_phong .'</td>';
                                     }
                                 }                                
                                 echo '<td>' . $ngay_dang_ky . '</td>';
@@ -213,36 +214,51 @@
         function myChoice() {
             let checkboxes = document.querySelectorAll(".choice");
             let remains = document.querySelectorAll(".remain");
-        
+            let scheduleCells = document.querySelectorAll("td[data-value]");
+
+            // Vô hiệu hóa checkbox nếu số lượng còn lại là 0
             checkboxes.forEach((checkbox, index) => {
                 let remainValue = parseInt(remains[index].innerText.trim());
-                console.log(`Index: ${index}, Remain: ${remainValue}`);
                 if (remainValue === 0) {
                     checkbox.disabled = true;
                     remains[index].style.color = "black";
                 }
             });
-        }    
 
+            // Tự động chọn checkbox nếu mã lịch thi trùng nhau và đổi màu nền
+            checkboxes.forEach((checkbox) => {
+                let checkboxValue = checkbox.value;
+
+                scheduleCells.forEach((cell) => {
+                    let cellValue = cell.getAttribute("data-value");
+                    if (checkboxValue === cellValue) {
+                        checkbox.checked = true;
+                        checkbox.closest("tr").style.backgroundColor = "#dadada"; // Đổi màu nền thẻ tr
+                    }
+                });
+            });
+        }
+
+        //Lọc học phần
         function filterFunction() {
-        var select, filter, table, tr, td, i, txtValue;
-        select = document.querySelector(".course-filter"); 
-        filter = select.value.toUpperCase(); 
-        table = document.querySelector(".schedule-table");
-        tr = table.getElementsByTagName("tr");
+            var select, filter, table, tr, td, i, txtValue;
+            select = document.querySelector(".course-filter"); 
+            filter = select.value.toUpperCase(); 
+            table = document.querySelector(".schedule-table");
+            tr = table.getElementsByTagName("tr");
 
-        for (i = 1; i < tr.length; i++) {
-            let td = tr[i].getElementsByTagName("td")[1]; 
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (filter === "" || txtValue.toUpperCase() === filter) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+            for (i = 1; i < tr.length; i++) {
+                let td = tr[i].getElementsByTagName("td")[1]; 
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (filter === "" || txtValue.toUpperCase() === filter) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
                 }
             }
         }
-    }
 
     </script>
 </body>

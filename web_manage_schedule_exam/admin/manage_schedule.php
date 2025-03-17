@@ -81,11 +81,26 @@
                                 $result_phong_thi = $conn->query($sql_phong_thi);
                                 
                                 if ($result_phong_thi->num_rows > 0) {
-                                    while($row = $result_phong_thi->fetch_assoc()) {
-                                        echo '<td>' . $row["suc_chua"] . '</td>';
-                                    }
+                                    $row = $result_phong_thi->fetch_assoc();
+                                    $suc_chua = $row["suc_chua"];
+                                    echo '<td>' . $suc_chua . '</td>';
                                 }
-                                echo '<td id="view-icon"><a href=""><i class="fa-regular fa-eye"></i></a></td>';
+                                //Đếm số lượng sinh viên đã đăny kí lịch thi
+                                $sql = "SELECT COUNT(*) AS so_luong FROM dangkythi WHERE ma_lich_thi = '$ma_lich_thi'";
+                                $result = $conn->query($sql);
+                            
+                                if ($result->num_rows > 0) {
+                                    $row = $result->fetch_assoc();
+                                    $so_luong = $row['so_luong'];
+                                } else {
+                                    $so_luong = 0; 
+                                }
+
+                                //Tính số lượng còn lại
+                                $con_lai = $suc_chua - $so_luong;
+                                
+                                echo '<td class="remain" style="color: red;">' . $con_lai . '</td>';
+                                echo '<td id="view-icon"><a href="view_student_list.php?ma_lich_thi=' . $ma_lich_thi . '"><i class="fa-regular fa-eye"></i></a></td>';
                                 echo '<td id="update-icon"><a href="update_schedule.php?ma_lich_thi=' . $ma_lich_thi . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
                                 echo '</tr>';  
                             }
