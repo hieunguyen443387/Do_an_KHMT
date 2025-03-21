@@ -23,6 +23,7 @@
         }
 
         if ($result_dang_ki_thi->num_rows > 0) {
+            
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
 
@@ -30,16 +31,27 @@
             $sheet->setCellValue('A1', 'STT');
             $sheet->setCellValue('B1', 'Mã môn học');
             $sheet->setCellValue('C1', 'Tên môn học');
-            $sheet->setCellValue('D1', 'Ngày đăng ký');
+            $sheet->setCellValue('D1', 'Lịch thi');
+            $sheet->setCellValue('F1', 'Ngày đăng ký');
 
             // Đổ dữ liệu
             $rowCount = 2;
             $stt = 1;
             while ($data = $result_dang_ki_thi->fetch_assoc()) {
+                $ngay_thi = $data["ngay_thi"];
+                $ma_phong = $data["ma_phong"];
+                $part = (explode("-",$ngay_thi));
+                $ngay_thi_update = $part[2] . "-" . $part[1]. "-" . $part[0];
+                $gio_ket_thuc = $data["gio_ket_thuc"];
+                $gio_bat_dau = $data["gio_bat_dau"];
+                if (empty($data['ma_phong'])) {
+                    continue;
+                }
                 $sheet->setCellValue('A' . $rowCount, $stt++);
                 $sheet->setCellValue('B' . $rowCount, $data['ma_hoc_phan']);
                 $sheet->setCellValue('C' . $rowCount, $data['ten_hoc_phan']);
-                $sheet->setCellValue('D' . $rowCount, $data['ngay_dang_ky']); // Đã sửa lỗi
+                $sheet->setCellValue('D' . $rowCount, " ngày $ngay_thi_update từ $gio_bat_dau - $gio_ket_thuc, Ph $ma_phong");
+                $sheet->setCellValue('F' . $rowCount, $data['ngay_dang_ky']); 
                 $rowCount++;
             }
 

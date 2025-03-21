@@ -27,8 +27,8 @@
                     <input id="file-upload" type="file" name="excel_file" accept=".xls,.xlsx" required>
                 </form>
                 <div class="search">
-                    <input type="text" id="search-input" placeholder="Nhập mã sinh viên hoặc tên...">
-                    <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>          
+                    <input type="text" id="search-input" placeholder="Nhập mã sinh viên hoặc tên..." onkeyup="searchFunction()">
+                    <button id="search-button" onclick="searchFunction()"><i class="fa-solid fa-magnifying-glass"></i></button>          
                 </div>
 
                

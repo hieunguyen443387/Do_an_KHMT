@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="manage_add.css">
     <script src="select_all.js"></script>
+    <script src="search.js"></script>
     <title>Trang quản lý lịch thi</title>
     
 </head>

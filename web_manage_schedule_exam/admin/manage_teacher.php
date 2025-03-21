@@ -27,8 +27,8 @@
                     <input id="file-upload" type="file" name="excel_file" accept=".xls,.xlsx" required>
                 </form>
                 <div class="search">
-                    <input type="text" id="search-input" placeholder="Nhập mã giảng viên hoặc tên...">
-                    <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>          
+                    <input type="text" id="search-input" placeholder="Nhập mã giảng viên hoặc tên..." onkeyup="searchFunction()">
+                    <button id="search-button" onclick="searchFunction()"><i class="fa-solid fa-magnifying-glass"></i></button>          
                 </div>
                
             </div>
@@ -58,12 +58,14 @@
                             while($row = $result_giang_vien->fetch_assoc()) {
                                 $mgv = $row["mgv"];
                                 $ngay_sinh = $row['ngay_sinh'];
+                                $part = (explode("-",$ngay_sinh));
+                                $ngay_sinh_update = $part[2] . "-" . $part[1]. "-" . $part[0];
                                 echo '<tr>';
                                 echo '<td><input type="checkbox" name="select_all[]" value="' . $mgv . '"></td>';
                                 echo '<td>' . $stt++ . '</td>';
                                 echo '<td>' . $mgv . '</td>';
                                 echo '<td>' . $row["ho_dem"] . " " . $row["ten"] . '</td>';
-                                echo '<td>' . $ngay_sinh . '</td>';
+                                echo '<td>' . $ngay_sinh_update . '</td>';
                                 echo '<td>' . $row["khoa"] . '</td>';
                                 echo '<td>' . $row["gioi_tinh"] . '</td>';
                                 echo '<td id="update-icon"><a href="update_teacher.php?mgv=' . $mgv . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
@@ -96,6 +98,6 @@
     </div>       
         
     <?php include('footer.php'); ?>  
-    
+
 </body>
 </html>

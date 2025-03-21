@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2025 at 10:49 AM
+-- Generation Time: Mar 21, 2025 at 10:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -53,6 +53,14 @@ CREATE TABLE `dangkythi` (
   `ngay_dang_ky` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `dangkythi`
+--
+
+INSERT INTO `dangkythi` (`msv`, `ma_lich_thi`, `ngay_dang_ky`) VALUES
+(7575, 2, '2025-03-19 10:48:40'),
+(7575, 101, '2025-03-20 15:18:26');
+
 -- --------------------------------------------------------
 
 --
@@ -73,7 +81,8 @@ CREATE TABLE `giangvien` (
 --
 
 INSERT INTO `giangvien` (`mgv`, `ho_dem`, `ten`, `khoa`, `ngay_sinh`, `gioi_tinh`) VALUES
-(3131, 'Đoàn Minh', 'Long', 'Công nghệ thông tin', '2025-03-19', 'Nam');
+(3131, 'Đoàn Minh', 'Long', 'Công nghệ thông tin', '2025-03-19', 'Nam'),
+(9191, 'Cao Hoàng', 'Anh', 'Công nghệ thông tin', '2025-03-08', 'Nam');
 
 -- --------------------------------------------------------
 
@@ -92,7 +101,8 @@ CREATE TABLE `hocphan` (
 --
 
 INSERT INTO `hocphan` (`ma_hoc_phan`, `ten_hoc_phan`, `so_tin_chi`) VALUES
-(7080111, 'Pháp luật đại cương', 3);
+(7080111, 'Pháp luật đại cương', 3),
+(7080116, 'Phát triển ứng dụng Web + BTL', 4);
 
 -- --------------------------------------------------------
 
@@ -102,23 +112,24 @@ INSERT INTO `hocphan` (`ma_hoc_phan`, `ten_hoc_phan`, `so_tin_chi`) VALUES
 
 CREATE TABLE `lichthi` (
   `ma_lich_thi` int(11) NOT NULL,
-  `ma_hoc_phan` int(10) NOT NULL,
   `ngay_thi` date NOT NULL,
   `gio_bat_dau` time NOT NULL,
   `gio_ket_thuc` time NOT NULL,
-  `ma_phong` varchar(10) NOT NULL,
-  `mgv` int(10) NOT NULL
+  `mgv` int(10) DEFAULT NULL,
+  `ma_hoc_phan` int(10) DEFAULT NULL,
+  `ma_phong` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `lichthi`
 --
 
-INSERT INTO `lichthi` (`ma_lich_thi`, `ma_hoc_phan`, `ngay_thi`, `gio_bat_dau`, `gio_ket_thuc`, `ma_phong`, `mgv`) VALUES
-(1, 7080111, '2025-03-19', '15:30:00', '16:20:00', 'P501', 3131),
-(2, 7080111, '2025-03-06', '18:20:00', '19:10:00', 'P501', 3131),
-(6, 7080111, '2025-03-19', '07:20:00', '08:10:00', 'P501', 3131),
-(10, 7080111, '2025-03-19', '14:33:00', '15:23:00', 'P501', 3131);
+INSERT INTO `lichthi` (`ma_lich_thi`, `ngay_thi`, `gio_bat_dau`, `gio_ket_thuc`, `mgv`, `ma_hoc_phan`, `ma_phong`) VALUES
+(1, '2025-03-29', '13:20:00', '14:10:00', 3131, 7080111, 'P501'),
+(2, '2025-03-06', '20:00:00', '20:50:00', 3131, 7080111, NULL),
+(3, '2025-03-04', '17:20:00', '18:10:00', 3131, 7080111, 'P501'),
+(101, '2025-03-11', '22:19:00', '23:09:00', 9191, 7080116, 'P501'),
+(111, '2025-03-06', '17:41:00', '18:31:00', 3131, 7080111, 'P501');
 
 -- --------------------------------------------------------
 
@@ -185,8 +196,7 @@ ALTER TABLE `dangkythi`
 -- Indexes for table `giangvien`
 --
 ALTER TABLE `giangvien`
-  ADD PRIMARY KEY (`mgv`),
-  ADD UNIQUE KEY `email` (`khoa`);
+  ADD PRIMARY KEY (`mgv`);
 
 --
 -- Indexes for table `hocphan`
@@ -199,9 +209,9 @@ ALTER TABLE `hocphan`
 --
 ALTER TABLE `lichthi`
   ADD PRIMARY KEY (`ma_lich_thi`),
-  ADD KEY `ma_mon_hoc` (`ma_hoc_phan`),
-  ADD KEY `ma_phong` (`ma_phong`),
-  ADD KEY `ma_giang_vien` (`mgv`);
+  ADD KEY `fk_mgv` (`mgv`),
+  ADD KEY `fk_ma_phong` (`ma_phong`),
+  ADD KEY `fk_ma_hoc_phan` (`ma_hoc_phan`);
 
 --
 -- Indexes for table `phongthi`
@@ -223,7 +233,7 @@ ALTER TABLE `sinhvien`
 -- AUTO_INCREMENT for table `lichthi`
 --
 ALTER TABLE `lichthi`
-  MODIFY `ma_lich_thi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ma_lich_thi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- Constraints for dumped tables
@@ -240,9 +250,9 @@ ALTER TABLE `dangkythi`
 -- Constraints for table `lichthi`
 --
 ALTER TABLE `lichthi`
-  ADD CONSTRAINT `lichthi_ibfk_1` FOREIGN KEY (`ma_hoc_phan`) REFERENCES `hocphan` (`ma_hoc_phan`) ON DELETE CASCADE,
-  ADD CONSTRAINT `lichthi_ibfk_2` FOREIGN KEY (`ma_phong`) REFERENCES `phongthi` (`ma_phong`) ON DELETE CASCADE,
-  ADD CONSTRAINT `lichthi_ibfk_3` FOREIGN KEY (`mgv`) REFERENCES `giangvien` (`mgv`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_ma_hoc_phan` FOREIGN KEY (`ma_hoc_phan`) REFERENCES `hocphan` (`ma_hoc_phan`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_ma_phong` FOREIGN KEY (`ma_phong`) REFERENCES `phongthi` (`ma_phong`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_mgv` FOREIGN KEY (`mgv`) REFERENCES `giangvien` (`mgv`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

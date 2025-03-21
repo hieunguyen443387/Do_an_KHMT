@@ -22,7 +22,7 @@
                 
                 <div class="search">
                     <input type="text" id="search-input" onkeyup="searchFunction()" placeholder="Nhập mã học phần hoặc tên học phần...">
-                    <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>          
+                    <button id="search-button" onclick="searchFunction()"><i class="fa-solid fa-magnifying-glass"></i></button>          
                 </div>
 
                
