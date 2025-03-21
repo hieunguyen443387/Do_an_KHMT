@@ -144,4 +144,62 @@ if (isset($_POST['import-teacher-button']) && isset($_FILES['excel_file'])) {
     exit(0);
 }
 
+if (isset($_POST['import-class-button']) && isset($_FILES['excel_file'])) {
+    $file = $_FILES['excel_file']['tmp_name'];
+    
+    if (!$file) {
+        die("Vui lòng chọn file Excel!");
+    }
+
+    $spreadsheet = IOFactory::load($file);
+    $worksheet = $spreadsheet->getActiveSheet();
+    $data = $worksheet->toArray();
+
+    // Bỏ qua hàng đầu tiên nếu là tiêu đề
+    array_shift($data);
+
+    foreach ($data as $row) {
+        $i = 0;
+
+        // Tìm cột đầu tiên có dữ liệu
+        while ($i < count($row) && empty(trim($row[$i]))) {
+            $i++;
+        }
+
+        // Đảm bảo có đủ cột dữ liệu để nhập
+        if (!isset($row[$i+1])) {
+            continue; // Bỏ qua dòng nếu thiếu dữ liệu
+        }
+
+        // Gán giá trị từ vị trí hợp lệ
+        $ma_phong = trim($row[$i]);
+        $suc_chua = trim($row[$i+1]);
+
+        // Nếu mã sinh viên rỗng, có phải kiểu số nguyên không, nếu không bỏ qua hàng này bỏ qua hàng này
+        if (empty($ma_phong) ) { 
+            continue;
+        }        
+        
+        // Kiểm tra xem mã sinh viên đã tồn tại chưa
+        $sql_check = "SELECT * FROM phongthi WHERE ma_phong = ?";
+        $stmt_check = $conn->prepare($sql_check);
+        $stmt_check->bind_param("s", $ma_phong);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
+
+        if ($result_check->num_rows > 0) {
+            continue; // Nếu ma_phong đã tồn tại, bỏ qua
+        }
+
+        // Thêm vào database
+        $sql_phong_thi = "INSERT INTO phongthi (ma_phong, suc_chua) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql_phong_thi);
+        $stmt->bind_param("ss", $ma_phong, $suc_chua);
+        $stmt->execute();
+        
+    }
+    
+    header('Location: manage_class.php');
+    exit(0);
+}
 ?>

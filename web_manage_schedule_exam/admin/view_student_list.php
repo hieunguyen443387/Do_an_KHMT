@@ -15,7 +15,6 @@
 </head>
 <body> 
 
-
 <?php include('header.php'); ?>
 
     <div class="container">
@@ -43,11 +42,15 @@
                         $result_hoc_phan = $conn->query($sql_hoc_phan);
                         if ($result_hoc_phan->num_rows > 0) {
                             $row = $result_hoc_phan->fetch_assoc();
-                            echo ' học phần ' . $row["ten_hoc_phan"];
+                            echo ', học phần ' . $row["ten_hoc_phan"];
                         }
                     }
                 ?>
             :</h3>
+            <br>
+            <form action="export.php?ma_lich_thi=<?php echo $ma_lich_thi; ?>" method="post">
+                <button type="" id="export-button" name="export-student-button"><i class="fa-solid fa-file-excel"></i>Xuất Excel</button>
+            </form>
             <table class="crud-table">
                 <thead>
                     <tr>
@@ -98,7 +101,7 @@
                                 echo '</tr>';  
                             }
                         } else {
-                            echo "Chưa có lịch thi";
+                            echo "Chưa có sinh viên đăng kí";
                         }                        
                     ?>
 

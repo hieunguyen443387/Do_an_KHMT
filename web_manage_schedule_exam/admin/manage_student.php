@@ -26,9 +26,6 @@
                     <button type="submit" id="import-button" name="import-student-button">Upload</button>
                     <input id="file-upload" type="file" name="excel_file" accept=".xls,.xlsx" required>
                 </form>
-                <form action="export.php" method="post">
-                    <button type="" id="export-button" name="export-student-button"><i class="fa-solid fa-file-export"></i>Export</button>
-                </form>
                 <div class="search">
                     <input type="text" id="search-input" placeholder="Nhập mã sinh viên hoặc tên...">
                     <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>          

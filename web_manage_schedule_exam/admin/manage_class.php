@@ -16,7 +16,7 @@
         <?php include('tag.php'); ?>
 
         <div class="crud">
-            <h3>Danh sách lớp:</h3>
+            <h3>Danh sách phòng thi:</h3>
             <div class="button-group">
                 <a id="add-button" href="add_class.php">Thêm phòng thi</a>
                 <form action="import.php" method="post" enctype="multipart/form-data" class="upload-form">

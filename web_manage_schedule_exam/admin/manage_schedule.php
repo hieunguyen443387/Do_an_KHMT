@@ -19,13 +19,7 @@
             <h3>Danh sách học phần:</h3>
             <div class="button-group">
                 <a id="add-button" href="add_schedule.php">Thêm lịch thi</a>
-                <form action="import.php" method="post" enctype="multipart/form-data" class="upload-form">
-                    <label for="file-upload" class="custom-file-upload">
-                        Choose File
-                    </label>
-                    <button type="submit" id="import-button" name="import-course-button">Upload</button>
-                    <input id="file-upload" type="file" name="excel_file" accept=".xls,.xlsx" required>
-                </form>
+                
                 <div class="search">
                     <input type="text" id="search-input" onkeyup="searchFunction()" placeholder="Nhập mã học phần hoặc tên học phần...">
                     <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>          
@@ -39,8 +33,8 @@
                         <th>Mã MH</th>
                         <th>Tên môn học</th>
                         <th>Lịch thi</th>
-                        <th>Số lượng</th>
-                        <th>Còn lại</th>
+                        <th>Cán bộ coi thi</th>
+                        <th>Đã đăng kí</th>
                         <th>Xem</th>
                         <th>Sửa</th>
                     </tr>
@@ -59,6 +53,7 @@
                                 $ma_phong = $row["ma_phong"];
                                 $ma_lich_thi = $row["ma_lich_thi"];
                                 $ma_hoc_phan = $row["ma_hoc_phan"];
+                                $mgv = $row["mgv"];
                                 $ngay_thi = $row["ngay_thi"];
                                 $part = (explode("-",$ngay_thi));
                                 $ngay_thi_update = $part[2] . "-" . $part[1]. "-" . $part[0];
@@ -77,14 +72,15 @@
 
                                 echo '<td>' . $ngay_thi_update . ' từ ' . $gio_bat_dau . ' - ' . $gio_ket_thuc . ', Ph '. $ma_phong .'</td>';
 
-                                $sql_phong_thi = "SELECT * FROM phongthi";
-                                $result_phong_thi = $conn->query($sql_phong_thi);
+                                $sql_giang_vien = "SELECT * FROM giangvien where mgv = '$mgv'";
+                                $result_giang_vien = $conn->query($sql_giang_vien);
                                 
-                                if ($result_phong_thi->num_rows > 0) {
-                                    $row = $result_phong_thi->fetch_assoc();
-                                    $suc_chua = $row["suc_chua"];
-                                    echo '<td>' . $suc_chua . '</td>';
+                                if ($result_giang_vien->num_rows > 0) {
+                                    $row = $result_giang_vien->fetch_assoc();
+                                    echo '<td>' . $row["ho_dem"] . ' ' . $row["ten"] . '</td>';
+                                    
                                 }
+
                                 //Đếm số lượng sinh viên đã đăny kí lịch thi
                                 $sql = "SELECT COUNT(*) AS so_luong FROM dangkythi WHERE ma_lich_thi = '$ma_lich_thi'";
                                 $result = $conn->query($sql);
@@ -95,11 +91,8 @@
                                 } else {
                                     $so_luong = 0; 
                                 }
-
-                                //Tính số lượng còn lại
-                                $con_lai = $suc_chua - $so_luong;
                                 
-                                echo '<td class="remain" style="color: red;">' . $con_lai . '</td>';
+                                echo '<td class="remain" style="color: red;">' . $so_luong . '</td>';
                                 echo '<td id="view-icon"><a href="view_student_list.php?ma_lich_thi=' . $ma_lich_thi . '"><i class="fa-regular fa-eye"></i></a></td>';
                                 echo '<td id="update-icon"><a href="update_schedule.php?ma_lich_thi=' . $ma_lich_thi . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
                                 echo '</tr>';  

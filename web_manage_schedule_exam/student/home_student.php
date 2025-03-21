@@ -49,11 +49,15 @@
                         
                             echo '<input type="hidden" id="msv" name="msv" value="'. $msv . '">';
 
-                            $sql_lich_thi = "SELECT * FROM lichthi";
+                            $sql_lich_thi = "SELECT * FROM lichthi 
+                            INNER JOIN hocphan ON lichthi.ma_hoc_phan = hocphan.ma_hoc_phan ";
                             $result_lich_thi = $conn->query($sql_lich_thi);
                             
                             if ($result_lich_thi->num_rows > 0) {
                                 while($row = $result_lich_thi->fetch_assoc()) {
+                                    if (empty($row['ma_phong'])) {
+                                        continue;
+                                    }
                                     $ma_phong = $row["ma_phong"];
                                     $ma_lich_thi = $row["ma_lich_thi"];
                                     $ma_hoc_phan = $row["ma_hoc_phan"];
@@ -65,23 +69,18 @@
                                     echo '<tr>';
                                     echo '<td><input type="checkbox" class="choice" name="ma_lich_thi[]" value="'. $ma_lich_thi .'" style="cursor: pointer;"></td>';
                                     echo '<td>' . $ma_hoc_phan . '</td>';
+                                    echo '<td>' . $row["ten_hoc_phan"] . '</td>';
 
-                                    //Truy vấn tên học phần
-                                    $sql_hoc_phan = "SELECT * FROM hocphan where ma_hoc_phan = '$ma_hoc_phan'";
-                                    $result_hoc_phan = $conn->query($sql_hoc_phan);
-                                    
-                                    if ($result_hoc_phan->num_rows > 0) {
-                                            $row = $result_hoc_phan->fetch_assoc();
-                                            echo '<td>' . $row["ten_hoc_phan"] . '</td>';
-                                    }
-
-                                    $sql_phong_thi = "SELECT * FROM phongthi";
+                                    $sql_phong_thi = "SELECT * FROM phongthi where ma_phong = '$ma_phong'";
                                     $result_phong_thi = $conn->query($sql_phong_thi);
                                     
                                     if ($result_phong_thi->num_rows > 0) {
-                                            $row = $result_phong_thi->fetch_assoc();
-                                            $suc_chua = $row["suc_chua"];
-                                            echo '<td>' . $suc_chua . '</td>';
+                                        $row = $result_phong_thi->fetch_assoc();
+                                        $suc_chua = $row["suc_chua"];
+                                        echo '<td>' . $suc_chua . '</td>';
+                                    } else{
+                                        $suc_chua = 0;
+                                        echo '<td>' . $suc_chua . '</td>';
                                     }
 
                                     //Đếm số lượng sinh viên đã đăny kí lịch thi
@@ -97,8 +96,13 @@
 
                                     //Tính số lượng còn lại
                                     $con_lai = $suc_chua - $so_luong;
+                                    if ($con_lai >= 0){
+                                        $con_lai_moi = $con_lai;
+                                    } else{
+                                        $con_lai_moi = 0;
+                                    }
                                     
-                                    echo '<td class="remain" style="color: red;">' . $con_lai . '</td>';
+                                    echo '<td class="remain" style="color: red;">' . $con_lai_moi . '</td>';
 
                                     echo '<td>' . $ngay_thi_update . ' từ ' . $gio_bat_dau . ' - ' . $gio_ket_thuc . ', Ph '. $ma_phong .'</td>';
                                     echo '</tr>';  
@@ -143,53 +147,53 @@
                 <tbody>
                     <?php         
 
-                        $sql_dang_ki_thi = "SELECT * FROM dangkythi";
+                        $sql_dang_ki_thi = "SELECT dangkythi.ma_lich_thi, dangkythi.msv, dangkythi.ngay_dang_ky, 
+                        lichthi.ngay_thi, lichthi.gio_bat_dau, lichthi.gio_ket_thuc, lichthi.ma_phong, 
+                        hocphan.ten_hoc_phan, hocphan.ma_hoc_phan
+                        FROM dangkythi
+                        INNER JOIN lichthi ON dangkythi.ma_lich_thi = lichthi.ma_lich_thi
+                        INNER JOIN hocphan ON lichthi.ma_hoc_phan = hocphan.ma_hoc_phan
+                        WHERE dangkythi.msv = '$msv'";
                         $result_dang_ki_thi = $conn->query($sql_dang_ki_thi);
                         
                         if ($result_dang_ki_thi->num_rows > 0) {
                             while($row = $result_dang_ki_thi->fetch_assoc()) {
-                                echo '<tr>';
+                                if (empty($row['ma_phong'])) {
+                                    continue;
+                                }
                                 $ma_lich_thi = $row["ma_lich_thi"];
                                 $ngay_dang_ky = $row["ngay_dang_ky"];
+                                $ngay_thi = $row["ngay_thi"];
+                                $part = (explode("-",$ngay_thi));
+                                $ngay_thi_update = $part[2] . "-" . $part[1]. "-" . $part[0];
+                                $gio_ket_thuc = $row["gio_ket_thuc"];
+                                $gio_bat_dau = $row["gio_bat_dau"];
+                                $ma_hoc_phan = $row['ma_hoc_phan'];
+                                $ma_lich_thi = $row['ma_lich_thi'];
+                                $ma_phong = $row['ma_phong'];
+                
+                                echo '<tr>';
+                                echo '<td>' . $ma_hoc_phan . '</td>';
+                                echo '<td>' . $row["ten_hoc_phan"] . '</td>';
 
-                                //Truy vấn mã học phần
-                                $sql_lich_thi = "SELECT * FROM lichthi where ma_lich_thi = '$ma_lich_thi'";
-                                $result_lich_thi = $conn->query($sql_lich_thi);
-                                
-                                if ($result_lich_thi->num_rows > 0) {
-                                    while($row = $result_lich_thi->fetch_assoc()) {
-                                        $ngay_thi = $row["ngay_thi"];
-                                        $part = (explode("-",$ngay_thi));
-                                        $ngay_thi_update = $part[2] . "-" . $part[1]. "-" . $part[0];
-                                        $gio_ket_thuc = $row["gio_ket_thuc"];
-                                        $gio_bat_dau = $row["gio_bat_dau"];
-                                        $ma_hoc_phan = $row['ma_hoc_phan'];
-                                        $ma_lich_thi = $row['ma_lich_thi'];
-                                        echo '<td>' . $row['ma_hoc_phan'] . '</td>';
-
-                                        //Truy vấn tên học phần
-                                        $sql_hoc_phan = "SELECT * FROM hocphan where ma_hoc_phan = '$ma_hoc_phan'";
-                                        $result_hoc_phan = $conn->query($sql_hoc_phan);
-                                        
-                                        if ($result_hoc_phan->num_rows > 0) {
-                                            $row = $result_hoc_phan->fetch_assoc();
-                                                echo '<td>' . $row["ten_hoc_phan"] . '</td>';
-                                        }
-
-                                        //Hiển thị lịch thi
-                                        echo '<td data-value="'. $ma_lich_thi .'" >' . $ngay_thi_update . ' từ ' . $gio_bat_dau . ' - ' . $gio_ket_thuc . ', Ph '. $ma_phong .'</td>';
-                                    }
-                                }                                
+                                //Hiển thị lịch thi
+                                echo '<td data-value="'. $ma_lich_thi .'" >' . $ngay_thi_update . ' từ ' . $gio_bat_dau . ' - ' . $gio_ket_thuc . ', Ph '. $ma_phong .'</td>';
                                 echo '<td>' . $ngay_dang_ky . '</td>';
                                 echo '</tr>'; 
-                            }
+                                }                                
+                            
                         } else {
                             echo "Chưa có lịch thi";
                         }                         
                     ?>    
                 </tbody>
             </table>
-            <button class="export-schedule-button"><i class="fa-solid fa-file-export"></i> Xuất phiếu đăng ký</button>
+            <form action="export.php?msv=<?php echo $msv; ?>" method="post">
+                <button type="submit" name="export-schedule-button" class="export-schedule-button">
+                    <i class="fa-solid fa-file-export"></i> Xuất phiếu đăng ký
+                </button>
+            </form>
+
         </div>   
     </div>     
         
@@ -232,6 +236,7 @@
                 scheduleCells.forEach((cell) => {
                     let cellValue = cell.getAttribute("data-value");
                     if (checkboxValue === cellValue) {
+                        checkbox.disabled = true;
                         checkbox.checked = true;
                         checkbox.closest("tr").style.backgroundColor = "#dadada"; // Đổi màu nền thẻ tr
                     }
