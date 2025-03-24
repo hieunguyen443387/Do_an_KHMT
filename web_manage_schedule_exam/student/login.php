@@ -1,29 +1,40 @@
 <?php
-session_start(); // Bắt đầu session
-
+session_start();
 include('config.php');
 
-
-// Kiểm tra xem form có được gửi đi hay không
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Kiểm tra xem các biến có tồn tại hay không
     if (isset($_POST['msv']) && isset($_POST['mat_khau'])) {
-        $msv = $_POST['msv'];
-        $mat_khau = $_POST['mat_khau'];
+        $msv = trim($_POST['msv']);
+        $mat_khau = trim($_POST['mat_khau']); 
 
-        // Kiểm tra thông tin đăng nhập
-        $sql = "SELECT msv FROM sinhvien WHERE msv = '$msv' AND mat_khau = '$mat_khau'";
-        $result = $conn->query($sql);
+        // Truy vấn lấy mật khẩu băm từ database
+        $sql = "SELECT msv, mat_khau FROM sinhvien WHERE msv = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $msv); 
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $_SESSION['msv'] = $msv;
-            header("Location: home_student.php");
-            exit();
+            $row = $result->fetch_assoc();
+            
+            // Kiểm tra mật khẩu nhập vào với mật khẩu đã băm
+            if (password_verify($mat_khau, $row['mat_khau'])) {
+                $_SESSION['msv'] = $msv;
+                header("Location: home_student.php");
+                exit();
+            } else {
+                echo "Mật khẩu không đúng.";
+            }
         } else {
-            echo "Mã sinh viên hoặc mật khẩu không đúng.";
+            echo "Mã sinh viên không tồn tại.";
         }
-    } 
+
+        $stmt->close();
+    } else {
+        echo "Vui lòng nhập đầy đủ thông tin.";
+    }
 }
+
 
 $conn->close();
 ?>

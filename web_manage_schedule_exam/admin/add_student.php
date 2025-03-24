@@ -17,7 +17,10 @@
         $ngay_sinh = $_POST['ngay_sinh'];
         $gioi_tinh = $_POST['gioi_tinh'];
         $part = (explode("-",$ngay_sinh));
-        $mat_khau = $part[2] . $part[1] . $part[0];
+        $mat_khau_raw = $part[2] . $part[1] . $part[0];
+
+        // Mã hóa mật khẩu
+        $mat_khau = password_hash($mat_khau_raw, PASSWORD_DEFAULT);
 
         $sql_sinh_vien = "SELECT msv FROM sinhvien WHERE msv = '$msv'";
         $result_sinh_vien  = $conn->query($sql_sinh_vien);

@@ -44,7 +44,7 @@
                     <?php         
                         require "limit_page.php";   
                         
-                        $sql_lich_thi = "SELECT * FROM lichthi LIMIT $limit OFFSET $offset";
+                        $sql_lich_thi = "SELECT * FROM lichthi ORDER BY ma_hoc_phan ASC LIMIT $limit OFFSET $offset";
                         $result_lich_thi = $conn->query($sql_lich_thi);
                         
                         if ($result_lich_thi->num_rows > 0) {

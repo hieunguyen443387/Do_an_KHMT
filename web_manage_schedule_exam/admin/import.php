@@ -64,7 +64,9 @@
                 $dateObject = DateTime::createFromFormat("Y-m-d", $ngay_sinh);
                 $ngay_sinh_sql = $dateObject->format("Y-m-d");
                 $part_sql = (explode("-",$ngay_sinh_sql));
-                $mat_khau_sql = $part_sql[2] . $part_sql[1] . $part_sql[0];
+                $mat_khau_raw = $part_sql[2] . $part_sql[1] . $part_sql[0];
+                // Mã hóa mật khẩu
+                $mat_khau = password_hash($mat_khau_raw, PASSWORD_DEFAULT);
     
                 $stmt->bind_param("ssssssss", $msv, $ho_dem, $ten, $ngay_sinh_sql, $lop, $khoa, $gioi_tinh, $mat_khau_sql);
                 $stmt->execute();

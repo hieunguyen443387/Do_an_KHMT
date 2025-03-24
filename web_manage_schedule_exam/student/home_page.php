@@ -20,7 +20,7 @@
     </div>    
         
     <div class="footer">
-        <p>Bạn đang đăng nhập với tên <u>NGUYỄN TRUNG HIẾU</u> <a href="#">(Thoát)</a></p>
+        <p>Bạn chưa đăng nhập <a href="login.php">(Đăng nhập)</a></p>
     </div>
 
 </body>

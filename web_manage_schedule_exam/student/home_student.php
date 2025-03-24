@@ -50,7 +50,8 @@
                             echo '<input type="hidden" id="msv" name="msv" value="'. $msv . '">';
 
                             $sql_lich_thi = "SELECT * FROM lichthi 
-                            INNER JOIN hocphan ON lichthi.ma_hoc_phan = hocphan.ma_hoc_phan ";
+                            INNER JOIN hocphan ON lichthi.ma_hoc_phan = hocphan.ma_hoc_phan 
+                            ORDER BY lichthi.ma_hoc_phan ASC";
                             $result_lich_thi = $conn->query($sql_lich_thi);
                             
                             if ($result_lich_thi->num_rows > 0) {
