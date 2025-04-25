@@ -16,6 +16,45 @@
         <?php include('tag.php'); ?>
 
         <div class="crud">
+            <!-- Thiết lập ngày đăng kí và hạn đăng kí -->
+        <div class="registration-config">
+            <h3>Thiết lập thời gian đăng ký lịch thi</h3>
+            <form action="" method="post" class="date-form">
+                <label for="start">Ngày bắt đầu:</label>
+                <input type="date" id="start" name="ngay_bat_dau" required>
+
+                <label for="end">Ngày kết thúc:</label>
+                <input type="date" id="end" name="ngay_ket_thuc" required>
+
+                <button type="submit" name="luu_cauhinh">Lưu</button>
+            </form>
+
+            <?php
+                if (isset($_POST['luu_cauhinh'])) {
+                    $ngay_bat_dau = $_POST['ngay_bat_dau'];
+                    $ngay_ket_thuc = $_POST['ngay_ket_thuc'];
+
+                    if ($ngay_bat_dau <= $ngay_ket_thuc) {
+                        $stmt = $conn->prepare("INSERT INTO cauhinh_dangky (ngay_bat_dau, ngay_ket_thuc) VALUES (?, ?)");
+                        $stmt->bind_param("ss", $ngay_bat_dau, $ngay_ket_thuc);
+                        if ($stmt->execute()) {
+                            echo "<p style='color:green;'>Đã lưu cấu hình thời gian đăng ký.</p>";
+                        } else {
+                            echo "<p style='color:red;'>Có lỗi xảy ra.</p>";
+                        }
+                        $stmt->close();
+                    } else {
+                        echo "<p style='color:red;'>Ngày bắt đầu không được sau ngày kết thúc.</p>";
+                    }
+                }
+
+                // Hiển thị cấu hình hiện tại
+                $result = $conn->query("SELECT * FROM cauhinh_dangky ORDER BY id DESC LIMIT 1");
+                if ($row = $result->fetch_assoc()) {
+                    echo "<p> Thời gian đăng ký hiện tại: <strong>" . $row['ngay_bat_dau'] . "</strong> đến <strong>" . $row['ngay_ket_thuc'] . "</strong></p>";
+                }
+            ?>
+        </div>
             <h3>Danh sách học phần:</h3>
             <div class="button-group">
                 <a id="add-button" href="add_schedule.php">Thêm lịch thi</a>
@@ -103,7 +142,6 @@
                     ?>
 
                 </tbody>
-                </form>
 
             </table>
             <?php 

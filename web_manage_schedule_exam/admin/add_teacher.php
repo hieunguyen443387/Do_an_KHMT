@@ -16,27 +16,34 @@
         $ngay_sinh = $_POST['ngay_sinh'];
         $gioi_tinh = $_POST['gioi_tinh'];
 
-        $sql_giang_vien = "SELECT mgv FROM giangvien WHERE mgv = '$mgv'";
-        $result_giang_vien  = $conn->query($sql_giang_vien);
-        if ($result_giang_vien->num_rows > 0 ) {
-            echo "Đã tồn tại";
+        // Kiểm tra mã giảng viên đã tồn tại chưa
+        $stmt_check = $conn->prepare("SELECT mgv FROM giangvien WHERE mgv = ?");
+        $stmt_check->bind_param("s", $mgv);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
+
+        if ($result_check->num_rows > 0 ) {
+            echo '<div class="alert">Mã giảng viên  đã tồn tại!</div>';
         } else {
+            // Thêm giảng viên mới
+            $stmt_insert = $conn->prepare("INSERT INTO giangvien (mgv, ho_dem, ten, khoa, ngay_sinh, gioi_tinh) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt_insert->bind_param("ssssss", $mgv, $ho_dem, $ten, $khoa, $ngay_sinh, $gioi_tinh);
 
-            // Chèn dữ liệu vào bảng
-            $sql_giang_vien = "INSERT INTO giangvien (mgv, ho_dem, ten, khoa, ngay_sinh, gioi_tinh) 
-            VALUES ('$mgv', '$ho_dem', '$ten', '$khoa', '$ngay_sinh', '$gioi_tinh')";
-            
-
-            if ($conn->query($sql_giang_vien) === TRUE ) {
-                header("Location:manage_teacher.php");
+            if ($stmt_insert->execute()) {
+                header("Location: manage_teacher.php");
                 exit();
             } else {
-                echo "Error: " . $sql_giang_vien . "<br>" . $conn->error;
+                echo "Lỗi: " . $stmt_insert->error;
             }
-        }
-    }
 
+            $stmt_insert->close();
+        }
+
+        $stmt_check->close();
+    }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>

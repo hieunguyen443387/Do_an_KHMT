@@ -1,6 +1,7 @@
 <?php 
     include('config.php'); 
     session_start();
+
     if (!isset($_SESSION['id_admin'])) {
         header("Location: ../home_admin/home_admin.html");
         exit();
@@ -12,27 +13,33 @@
         $ma_phong = $_POST['ma_phong'];
         $suc_chua = $_POST['suc_chua'];
 
-        $sql_phong_thi = "SELECT ma_phong FROM phongthi WHERE ma_phong = '$ma_phong'";
-        $result_phong_thi  = $conn->query($sql_phong_thi);
-        if ($result_phong_thi->num_rows > 0 ) {
-            echo "Đã tồn tại";
+        // Kiểm tra xem phòng đã tồn tại chưa
+        $stmt_check = $conn->prepare("SELECT ma_phong FROM phongthi WHERE ma_phong = ?");
+        $stmt_check->bind_param("s", $ma_phong);
+        $stmt_check->execute();
+        $result = $stmt_check->get_result();
+
+        if ($result->num_rows > 0) {
+            echo '<div class="alert">Mã phòng đã tồn tại!</div>';
         } else {
+            // Chèn dữ liệu nếu chưa tồn tại
+            $stmt_insert = $conn->prepare("INSERT INTO phongthi (ma_phong, suc_chua) VALUES (?, ?)");
+            $stmt_insert->bind_param("si", $ma_phong, $suc_chua);
 
-            // Chèn dữ liệu vào bảng
-            $sql_phong_thi = "INSERT INTO phongthi (ma_phong, suc_chua) 
-            VALUES ('$ma_phong', '$suc_chua')";
-            
-
-            if ($conn->query($sql_phong_thi) === TRUE ) {
-                header("Location:manage_class.php");
+            if ($stmt_insert->execute()) {
+                header("Location: manage_class.php");
                 exit();
             } else {
-                echo "Error: " . $sql_phong_thi . "<br>" . $conn->error;
+                echo "Lỗi: " . $stmt_insert->error;
             }
-        }
-    }
 
+            $stmt_insert->close();
+        }
+
+        $stmt_check->close();
+    }
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>

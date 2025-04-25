@@ -49,27 +49,32 @@
 
                     <?php         
                         require "limit_page.php";   
-                        
-                        $sql_phong_thi = "SELECT * FROM phongthi LIMIT $limit OFFSET $offset";
-                        $result_phong_thi = $conn->query($sql_phong_thi);
-                        
+
+                        // Chuyển sang prepared statement
+                        $stmt = $conn->prepare("SELECT * FROM phongthi LIMIT ? OFFSET ?");
+                        $stmt->bind_param("ii", $limit, $offset);  // "ii" là 2 số nguyên
+                        $stmt->execute();
+                        $result_phong_thi = $stmt->get_result();
+
                         if ($result_phong_thi->num_rows > 0) {
                             $stt = $offset + 1;
                             while($row = $result_phong_thi->fetch_assoc()) {
-                                $ma_phong = $row["ma_phong"];
+                                $ma_phong = htmlspecialchars($row["ma_phong"]);
+                                $suc_chua = htmlspecialchars($row["suc_chua"]);
 
                                 echo '<tr>';
                                 echo '<td><input type="checkbox" name="select_all[]" value="' . $ma_phong . '"></td>';
                                 echo '<td>' . $stt++ . '</td>';
                                 echo '<td>' . $ma_phong . '</td>';
-                                echo '<td>' . $row["suc_chua"] . '</td>';
-                                echo '<td id="update-icon"><a href="update_class.php?ma_phong=' . $ma_phong . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
-                                echo '<td id="delete-icon"><a href="delete.php?ma_phong=' . $ma_phong . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
+                                echo '<td>' . $suc_chua . '</td>';
+                                echo '<td id="update-icon"><a href="update_class.php?ma_phong=' . urlencode($ma_phong) . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
+                                echo '<td id="delete-icon"><a href="delete.php?ma_phong=' . urlencode($ma_phong) . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
                                 echo '</tr>';  
                             }
                         } else {
                             echo "Chưa có phòng thi";
-                        }                        
+                        }     
+                        $stmt->close();                   
                     ?>
 
                 </tbody>

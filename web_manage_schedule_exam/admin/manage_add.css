@@ -97,6 +97,85 @@ html, body {
     cursor: pointer; 
 }
 
+.alert {
+    margin: 20px auto;
+    padding: 15px 25px;
+    background-color: #ffdddd;
+    color: #d8000c;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    width: fit-content;
+    font-weight: bold;
+    animation: fadeIn 0.4s ease;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+/* **********************registration******************** */
+
+.registration-config {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.registration-config h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #b22222; 
+    font-size: 18px;
+}
+
+.date-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    align-items: center;
+}
+
+.date-form label {
+    font-weight: bold;
+    color: #333;
+}
+
+.date-form input[type="date"] {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.date-form button {
+    padding: 6px 14px;
+    background-color: #0F6CBF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.date-form button:hover {
+    background-color: #0056b3;
+}
+
+.registration-config p {
+    margin-top: 10px;
+    font-style: italic;
+    color: #333;
+}
+
 .exam-time input{
     width: 197px;
     margin-top: 20px;

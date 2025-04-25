@@ -53,35 +53,47 @@
 
                     <?php         
                         require "limit_page.php";   
-                        
-                        $sql_sinh_vien = "SELECT * FROM sinhvien LIMIT $limit OFFSET $offset";
-                        $result_sinh_vien = $conn->query($sql_sinh_vien);
-                        
+
+                        // Truy vấn danh sách sinh viên bằng prepared statement
+                        $stmt = $conn->prepare("SELECT * FROM sinhvien LIMIT ? OFFSET ?");
+                        $stmt->bind_param("ii", $limit, $offset);  // "ii" cho 2 tham số kiểu int
+                        $stmt->execute();
+                        $result_sinh_vien = $stmt->get_result();
+
                         if ($result_sinh_vien->num_rows > 0) {
                             $stt = $offset + 1;
-                            $bar = 1;
                             while($row = $result_sinh_vien->fetch_assoc()) {
-                                $msv = $row["msv"];
-                                $ngay_sinh = $row['ngay_sinh'];
-                                $part = (explode("-",$ngay_sinh));
-                                $ngay_sinh_update = $part[2] . "-" . $part[1]. "-" . $part[0];
+                                // Escape dữ liệu đầu ra
+                                $msv = htmlspecialchars($row["msv"]);
+                                $ho_dem = htmlspecialchars($row["ho_dem"]);
+                                $ten = htmlspecialchars($row["ten"]);
+                                $lop = htmlspecialchars($row["lop"]);
+                                $khoa = htmlspecialchars($row["khoa"]);
+                                $gioi_tinh = htmlspecialchars($row["gioi_tinh"]);
+
+                                // Định dạng lại ngày sinh
+                                $ngay_sinh = htmlspecialchars($row['ngay_sinh']);
+                                $part = explode("-", $ngay_sinh);
+                                $ngay_sinh_update = $part[2] . "-" . $part[1] . "-" . $part[0];
 
                                 echo '<tr>';
                                 echo '<td><input type="checkbox" name="select_all[]" value="' . $msv . '"></td>';
                                 echo '<td>' . $stt++ . '</td>';
                                 echo '<td>' . $msv . '</td>';
-                                echo '<td>' . $row["ho_dem"] . " " . $row["ten"] . '</td>';
+                                echo '<td>' . $ho_dem . " " . $ten . '</td>';
                                 echo '<td>' . $ngay_sinh_update . '</td>';
-                                echo '<td>' . $row["lop"] . '</td>';
-                                echo '<td>' . $row["khoa"] . '</td>';
-                                echo '<td>' . $row["gioi_tinh"] . '</td>';
-                                echo '<td id="update-icon"><a href="update_student.php?msv=' . $msv . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
-                                echo '<td id="delete-icon"><a href="delete.php?msv=' . $msv . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
+                                echo '<td>' . $lop . '</td>';
+                                echo '<td>' . $khoa . '</td>';
+                                echo '<td>' . $gioi_tinh . '</td>';
+                                echo '<td id="update-icon"><a href="update_student.php?msv=' . urlencode($msv) . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
+                                echo '<td id="delete-icon"><a href="delete.php?msv=' . urlencode($msv) . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
                                 echo '</tr>';  
                             }
                         } else {
                             echo "Chưa có sinh viên";
-                        }                        
+                        }
+
+                        $stmt->close();
                     ?>
 
                 </tbody>

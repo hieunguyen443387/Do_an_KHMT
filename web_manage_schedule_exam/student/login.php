@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 header("Location: home_student.php");
                 exit();
             } else {
-                echo "Mật khẩu không đúng.";
+                echo '<div class="alert">Đăng nhập không thành công. Vui lòng kiểm tra tên đăng nhập và mật khẩu</div>';
             }
         } else {
-            echo "Mã sinh viên không tồn tại.";
+            echo '<div class="alert">Đăng nhập không thành công. Vui lòng kiểm tra tên đăng nhập và mật khẩu</div>';
         }
 
         $stmt->close();

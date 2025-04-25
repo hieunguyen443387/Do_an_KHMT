@@ -1,6 +1,7 @@
 <?php 
     include('config.php'); 
     session_start();
+
     if (!isset($_SESSION['id_admin'])) {
         header("Location: ../home_admin/home_admin.html");
         exit();
@@ -13,27 +14,34 @@
         $ten_hoc_phan = $_POST['ten_hoc_phan'];
         $so_tin_chi = $_POST['so_tin_chi'];
 
-        $sql_hoc_phan = "SELECT * FROM hocphan WHERE ma_hoc_phan = '$ma_hoc_phan'";
-        $result_hoc_phan = $conn->query($sql_hoc_phan);
-        if ($result_hoc_phan->num_rows > 0 ) {
-            echo "Đã tồn tại";
+        // Kiểm tra học phần đã tồn tại chưa
+        $stmt_check = $conn->prepare("SELECT * FROM hocphan WHERE ma_hoc_phan = ?");
+        $stmt_check->bind_param("s", $ma_hoc_phan);
+        $stmt_check->execute();
+        $result = $stmt_check->get_result();
+
+        if ($result->num_rows > 0) {
+            echo '<div class="alert">Mã học phần đã tồn tại!</div>';
         } else {
+            // Thêm học phần mới
+            $stmt_insert = $conn->prepare("INSERT INTO hocphan (ma_hoc_phan, ten_hoc_phan, so_tin_chi) VALUES (?, ?, ?)");
+            $stmt_insert->bind_param("ssi", $ma_hoc_phan, $ten_hoc_phan, $so_tin_chi);
 
-            // Chèn dữ liệu vào bảng
-            $sql_hoc_phan = "INSERT INTO hocphan (ma_hoc_phan, ten_hoc_phan, so_tin_chi) 
-            VALUES ('$ma_hoc_phan', '$ten_hoc_phan', '$so_tin_chi')";
-            
-
-            if ($conn->query($sql_hoc_phan) === TRUE ) {
-                header("Location:manage_course.php");
+            if ($stmt_insert->execute()) {
+                header("Location: manage_course.php");
                 exit();
             } else {
-                echo "Error: " . $sql_hoc_phan . "<br>" . $conn->error;
+                echo "Lỗi: " . $stmt_insert->error;
             }
-        }
-    }
 
+            $stmt_insert->close();
+        }
+
+        $stmt_check->close();
+    }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -50,7 +58,7 @@
 
         <div class="add-logo">
             <h3>Hệ thống quản lý lịch thi</h3>
-            <h2>Thêm phòng thi</h2>
+            <h2>Thêm học phần</h2>
         </div>
 
         <form action="" class="add-form" method="post">

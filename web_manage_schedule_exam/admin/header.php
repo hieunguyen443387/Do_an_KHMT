@@ -28,21 +28,20 @@
             <a href="home_admin.php"><h3>Trang quản lý lịch thi</h3></a>
         </div>
         <div class="user" onclick="myFunction()">
-            <span style="text-transform: uppercase;"><?php 
-                    
-                    $id_admin = $_SESSION['id_admin'];
+            <span style="text-transform: uppercase;">
+            <?php 
+                $stmt = $conn->prepare("SELECT ho_dem, ten FROM admin WHERE id_admin = ?");
+                $stmt->bind_param("s", $id_admin);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
-                    $sql = "SELECT * FROM admin WHERE id_admin = '$id_admin'";
-                    $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    echo htmlspecialchars($row["ho_dem"] . " " . $row["ten"]);
+                }
 
-                    if ($result->num_rows > 0) {
-                        
-                        while($row = $result->fetch_assoc()) {
-                            echo  $row["ho_dem"]. " " . $row["ten"] ;
-                        }
-                    } 
-                ?>
-
+                $stmt->close();
+            ?>
             </span>
             <div class="dropdown-content" id="myDropdown">
                 <a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i>Thoát</a>

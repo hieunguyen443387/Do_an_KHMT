@@ -48,31 +48,38 @@
                 <tbody>
                     <form action="delete.php" method="post">
 
-                    <?php         
-                        require "limit_page.php";   
-                        
-                        $sql_hoc_phan = "SELECT * FROM hocphan LIMIT $limit OFFSET $offset";
-                        $result_hoc_phan = $conn->query($sql_hoc_phan);
-                        
-                        if ($result_hoc_phan->num_rows > 0) {
-                            $stt = $offset + 1;
-                            while($row = $result_hoc_phan->fetch_assoc()) {
-                                $ma_hoc_phan = $row["ma_hoc_phan"];
+                        <?php         
+                            require "limit_page.php";   
 
-                                echo '<tr>';
-                                echo '<td><input type="checkbox" name="select_all[]" value="' . $ma_hoc_phan . '"></td>';
-                                echo '<td>' . $stt++ . '</td>';
-                                echo '<td>' . $ma_hoc_phan . '</td>';
-                                echo '<td>' . $row["ten_hoc_phan"] . '</td>';
-                                echo '<td>' . $row["so_tin_chi"] . '</td>';
-                                echo '<td id="update-icon"><a href="update_course.php?ma_hoc_phan=' . $ma_hoc_phan . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
-                                echo '<td id="delete-icon"><a href="delete.php?ma_hoc_phan=' . $ma_hoc_phan . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
-                                echo '</tr>';  
-                            }
-                        } else {
-                            echo "Chưa có học phần";
-                        }                        
-                    ?>
+                            // Truy vấn danh sách học phần bằng prepared statement
+                            $stmt = $conn->prepare("SELECT * FROM hocphan LIMIT ? OFFSET ?");
+                            $stmt->bind_param("ii", $limit, $offset);  // "ii" = hai số nguyên
+                            $stmt->execute();
+                            $result_hoc_phan = $stmt->get_result();
+                            
+                            if ($result_hoc_phan->num_rows > 0) {
+                                $stt = $offset + 1;
+                                while($row = $result_hoc_phan->fetch_assoc()) {
+                                    // Escape dữ liệu khi hiển thị
+                                    $ma_hoc_phan = htmlspecialchars($row["ma_hoc_phan"]);
+                                    $ten_hoc_phan = htmlspecialchars($row["ten_hoc_phan"]);
+                                    $so_tin_chi = htmlspecialchars($row["so_tin_chi"]);
+
+                                    echo '<tr>';
+                                    echo '<td><input type="checkbox" name="select_all[]" value="' . $ma_hoc_phan . '"></td>';
+                                    echo '<td>' . $stt++ . '</td>';
+                                    echo '<td>' . $ma_hoc_phan . '</td>';
+                                    echo '<td>' . $ten_hoc_phan . '</td>';
+                                    echo '<td>' . $so_tin_chi . '</td>';
+                                    echo '<td id="update-icon"><a href="update_course.php?ma_hoc_phan=' . urlencode($ma_hoc_phan) . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
+                                    echo '<td id="delete-icon"><a href="delete.php?ma_hoc_phan=' . urlencode($ma_hoc_phan) . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
+                                    echo '</tr>';  
+                                }
+                            } else {
+                                echo "Chưa có học phần";
+                            }                        
+                            $stmt->close();
+                        ?>
 
                 </tbody>
 

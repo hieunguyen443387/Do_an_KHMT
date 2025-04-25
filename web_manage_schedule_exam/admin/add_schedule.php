@@ -1,10 +1,23 @@
 <?php 
     include('config.php'); 
     session_start();
-    if (!isset($_SESSION['id_admin'])) {
-        header("Location: ../home_admin/home_admin.html");
-        exit();
+    // Lấy cấu hình lịch thi
+    $sql_cauhinh = "SELECT ngay_bat_dau, ngay_ket_thuc FROM cauhinh_dangky LIMIT 1";
+    $stmt_cauhinh = $conn->prepare($sql_cauhinh);
+    $stmt_cauhinh->execute();
+    $result_cauhinh = $stmt_cauhinh->get_result();
+
+    if ($result_cauhinh && $result_cauhinh->num_rows > 0) {
+        $row_cauhinh = $result_cauhinh->fetch_assoc();
+        $ngay_bat_dau = $row_cauhinh['ngay_bat_dau'];
+        $ngay_ket_thuc = $row_cauhinh['ngay_ket_thuc'];
+    } else {
+        $ngay_bat_dau = '';
+        $ngay_ket_thuc = '';
     }
+
+    $stmt_cauhinh->close();
+
 
     $id_admin = $_SESSION['id_admin'];
 
@@ -17,37 +30,44 @@
         $ma_phong = $_POST['ma_phong'];
         $mgv = $_POST['mgv'];
 
-        $sql_lich_thi = "SELECT * FROM lichthi 
-                WHERE (ma_lich_thi = '$ma_lich_thi' 
-                    OR (ngay_thi = '$ngay_thi' 
-                        AND ma_phong = '$ma_phong'
-                        AND mgv = '$mgv'
-                        AND '$gio_bat_dau' BETWEEN gio_bat_dau AND gio_ket_thuc))";
-        $result_lich_thi = $conn->query($sql_lich_thi);
-        if ($result_lich_thi->num_rows > 0 ) {
-            while($row = $result_lich_thi->fetch_assoc()) {
-                if ($gio_bat_dau == $row['gio_bat_dau'] && $ngay_thi == $row['ngay_thi'] && $ma_phong == $row['ma_phong']){
-                    echo "Đã tồn tại";
+        // Kiểm tra lịch thi trùng
+        $sql_check = "SELECT * FROM lichthi 
+            WHERE ma_lich_thi = ? 
+            OR (ngay_thi = ? AND ma_phong = ? AND mgv = ? AND ? BETWEEN gio_bat_dau AND gio_ket_thuc)";
+        $stmt = $conn->prepare($sql_check);
+        $stmt->bind_param("sssss", $ma_lich_thi, $ngay_thi, $ma_phong, $mgv, $gio_bat_dau);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0 ) {
+            while($row = $result->fetch_assoc()) {
+                if ($gio_bat_dau == $row['gio_bat_dau'] && $ngay_thi == $row['ngay_thi'] && $ma_phong == $row['ma_phong']) {
+                    echo '<div class="alert">Lịch thi đã tồn tại!</div>';
+                    exit();
                 }
             }
-            echo "Đã tồn tại";
+            echo '<div class="alert">Lịch thi đã tồn tại!</div>';
         } else {
+            // Chèn dữ liệu vào bảng lichthi
+            $sql_insert = "INSERT INTO lichthi (ma_lich_thi, ma_hoc_phan, ngay_thi, gio_bat_dau, gio_ket_thuc, ma_phong, mgv) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt_insert = $conn->prepare($sql_insert);
+            $stmt_insert->bind_param("sssssss", $ma_lich_thi, $ma_hoc_phan, $ngay_thi, $gio_bat_dau, $gio_ket_thuc, $ma_phong, $mgv);
 
-            // Chèn dữ liệu vào bảng
-            $sql_lich_thi = "INSERT INTO lichthi (ma_lich_thi, ma_hoc_phan, ngay_thi, gio_bat_dau, gio_ket_thuc, ma_phong, mgv) 
-            VALUES ('$ma_lich_thi', '$ma_hoc_phan', '$ngay_thi','$gio_bat_dau', '$gio_ket_thuc', '$ma_phong', '$mgv')";
-            
-
-            if ($conn->query($sql_lich_thi) === TRUE ) {
-                header("Location:manage_schedule.php");
+            if ($stmt_insert->execute()) {
+                header("Location: manage_schedule.php");
                 exit();
             } else {
-                echo "Error: " . $sql_lich_thi . "<br>" . $conn->error;
+                echo "Lỗi: " . $stmt_insert->error;
             }
+            $stmt_insert->close();
         }
-    }
 
+        $stmt->close();
+    }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -114,7 +134,8 @@
                         }
                     ?>
                 </select>
-                <input type="date" id="ngay_thi" name="ngay_thi" placeholder="Ngày thi" required>
+                <input type="date" id="ngay_thi" name="ngay_thi" required value="<?php echo $ngay_bat_dau; ?>" min="<?php echo $ngay_bat_dau; ?>" max="<?php echo $ngay_ket_thuc; ?>">
+
             </div>
             <div class="exam-time">
                 <input type="time" id="gio_bat_dau" name="gio_bat_dau" placeholder="Giờ bắt đầu" required oninput="exam_time()">

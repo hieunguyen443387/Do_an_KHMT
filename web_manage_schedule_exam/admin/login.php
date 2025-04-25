@@ -22,11 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 exit();
             
         } else {
-            echo "Mã admin không tồn tại.";
+            echo '<div class="alert">Đăng nhập không thành công. Vui lòng kiểm tra tên đăng nhập và mật khẩu</div>';
         }
         $stmt->close();
     } else {
-        echo "Vui lòng nhập tên đăng nhập và mật khẩu.";
+        echo '<div class="alert">Vui lòng nhập tên đăng nhập và mật khẩu!</div>';
     }
 }
 

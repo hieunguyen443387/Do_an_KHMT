@@ -51,31 +51,46 @@
 
                     <?php         
                         require "limit_page.php";   
-                        $sql_giang_vien = "SELECT * FROM giangvien LIMIT $limit OFFSET $offset";           
-                        $result_giang_vien = $conn->query($sql_giang_vien);
+
+                        // Dùng prepared statement cho truy vấn giảng viên
+                        $stmt = $conn->prepare("SELECT * FROM giangvien LIMIT ? OFFSET ?");
+                        $stmt->bind_param("ii", $limit, $offset);
+                        $stmt->execute();
+                        $result_giang_vien = $stmt->get_result();
+
                         if ($result_giang_vien->num_rows > 0) {
                             $stt = $offset + 1;
-                            while($row = $result_giang_vien->fetch_assoc()) {
-                                $mgv = $row["mgv"];
-                                $ngay_sinh = $row['ngay_sinh'];
-                                $part = (explode("-",$ngay_sinh));
-                                $ngay_sinh_update = $part[2] . "-" . $part[1]. "-" . $part[0];
+                            while ($row = $result_giang_vien->fetch_assoc()) {
+                                // Escape dữ liệu đầu ra
+                                $mgv = htmlspecialchars($row["mgv"]);
+                                $ho_dem = htmlspecialchars($row["ho_dem"]);
+                                $ten = htmlspecialchars($row["ten"]);
+                                $khoa = htmlspecialchars($row["khoa"]);
+                                $gioi_tinh = htmlspecialchars($row["gioi_tinh"]);
+
+                                $ngay_sinh = htmlspecialchars($row["ngay_sinh"]);
+                                $part = explode("-", $ngay_sinh);
+                                $ngay_sinh_update = $part[2] . "-" . $part[1] . "-" . $part[0];
+
                                 echo '<tr>';
                                 echo '<td><input type="checkbox" name="select_all[]" value="' . $mgv . '"></td>';
                                 echo '<td>' . $stt++ . '</td>';
                                 echo '<td>' . $mgv . '</td>';
-                                echo '<td>' . $row["ho_dem"] . " " . $row["ten"] . '</td>';
+                                echo '<td>' . $ho_dem . " " . $ten . '</td>';
                                 echo '<td>' . $ngay_sinh_update . '</td>';
-                                echo '<td>' . $row["khoa"] . '</td>';
-                                echo '<td>' . $row["gioi_tinh"] . '</td>';
-                                echo '<td id="update-icon"><a href="update_teacher.php?mgv=' . $mgv . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
-                                echo '<td id="delete-icon"><a href="delete.php?mgv=' . $mgv . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
+                                echo '<td>' . $khoa . '</td>';
+                                echo '<td>' . $gioi_tinh . '</td>';
+                                echo '<td id="update-icon"><a href="update_teacher.php?mgv=' . urlencode($mgv) . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
+                                echo '<td id="delete-icon"><a href="delete.php?mgv=' . urlencode($mgv) . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
                                 echo '</tr>';  
                             }
                         } else {
                             echo "Chưa có giảng viên";
-                        }                        
+                        }
+
+                        $stmt->close();
                     ?>
+
 
                 </tbody>
 

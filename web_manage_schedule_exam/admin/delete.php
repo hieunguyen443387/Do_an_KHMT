@@ -1,115 +1,112 @@
 <?php
-    include('config.php'); 
+include('config.php');
 
-// Xóa sinh viên
-    if (isset($_GET['msv'])) {
-        $msv = $_GET['msv'];
-    
-        $sql_delete = "DELETE FROM sinhvien WHERE msv = '$msv'";
-    
-        if ($conn->query($sql_delete) === TRUE) {
-            
-            header("Location: manage_student.php");
-            exit();
-        } else {
-            echo "Lỗi khi xóa sinh viên: " . $conn->error;
-        }
+// Xóa sinh viên (theo msv GET)
+if (isset($_GET['msv'])) {
+    $stmt = $conn->prepare("DELETE FROM sinhvien WHERE msv = ?");
+    $stmt->bind_param("s", $_GET['msv']);
+    if ($stmt->execute()) {
+        header("Location: manage_student.php");
+        exit();
+    } else {
+        echo "Lỗi khi xóa sinh viên: " . $stmt->error;
     }
+    $stmt->close();
+}
 
-    if (isset($_POST['delete_multiple_student'])) {
-        $all_msv = $_POST['select_all'];
-        $extract_msv = implode(',', $all_msv);
-        $sql_delete = "DELETE FROM sinhvien WHERE msv in($extract_msv) ";
-        if ($conn->query($sql_delete) === TRUE) {
-            
-            header("Location: manage_student.php");
-            exit();
-        } else {
-            echo "Lỗi khi xóa sinh viên: " . $conn->error;
-        } 
+// Xóa nhiều sinh viên (POST)
+if (isset($_POST['delete_multiple_student'])) {
+    $all_msv = $_POST['select_all'];
+    $placeholders = implode(',', array_fill(0, count($all_msv), '?'));
+    $stmt = $conn->prepare("DELETE FROM sinhvien WHERE msv IN ($placeholders)");
+    $stmt->bind_param(str_repeat("s", count($all_msv)), ...$all_msv);
+    if ($stmt->execute()) {
+        header("Location: manage_student.php");
+        exit();
+    } else {
+        echo "Lỗi khi xóa sinh viên: " . $stmt->error;
     }
+    $stmt->close();
+}
 
-//Xóa giảng viên
-    if (isset($_GET['mgv'])) {
-        $mgv = $_GET['mgv'];
-    
-        $sql_delete = "DELETE FROM giangvien WHERE mgv = '$mgv'";
-    
-        if ($conn->query($sql_delete) === TRUE) {
-            
-            header("Location: manage_teacher.php");
-            exit();
-        } else {
-            echo "Lỗi khi xóa giảng viên: " . $conn->error;
-        }
+// Xóa giảng viên
+if (isset($_GET['mgv'])) {
+    $stmt = $conn->prepare("DELETE FROM giangvien WHERE mgv = ?");
+    $stmt->bind_param("s", $_GET['mgv']);
+    if ($stmt->execute()) {
+        header("Location: manage_teacher.php");
+        exit();
+    } else {
+        echo "Lỗi khi xóa giảng viên: " . $stmt->error;
     }
+    $stmt->close();
+}
 
-    if (isset($_POST['delete_multiple_teacher'])) {
-        $all_mgv = $_POST['select_all'];
-        $extract_mgv = implode(',', $all_mgv);
-        $sql_delete = "DELETE FROM giangvien WHERE mgv in($extract_mgv) ";
-        if ($conn->query($sql_delete) === TRUE) {
-            
-            header("Location: manage_teacher.php");
-            exit();
-        } else {
-            echo "Lỗi khi xóa giảng viên: " . $conn->error;
-        } 
+if (isset($_POST['delete_multiple_teacher'])) {
+    $all_mgv = $_POST['select_all'];
+    $placeholders = implode(',', array_fill(0, count($all_mgv), '?'));
+    $stmt = $conn->prepare("DELETE FROM giangvien WHERE mgv IN ($placeholders)");
+    $stmt->bind_param(str_repeat("s", count($all_mgv)), ...$all_mgv);
+    if ($stmt->execute()) {
+        header("Location: manage_teacher.php");
+        exit();
+    } else {
+        echo "Lỗi khi xóa giảng viên: " . $stmt->error;
     }
+    $stmt->close();
+}
 
 // Xóa phòng thi
-    if (isset($_GET['ma_phong'])) {
-        $ma_phong = $_GET['ma_phong'];
-    
-        $sql_delete = "DELETE FROM phongthi WHERE ma_phong = '$ma_phong'";
-    
-        if ($conn->query($sql_delete) === TRUE) {
-            
-            header("Location: manage_class.php");
-            exit();
-        } else {
-            echo "Lỗi khi xóa phòng: " . $conn->error;
-        }
+if (isset($_GET['ma_phong'])) {
+    $stmt = $conn->prepare("DELETE FROM phongthi WHERE ma_phong = ?");
+    $stmt->bind_param("s", $_GET['ma_phong']);
+    if ($stmt->execute()) {
+        header("Location: manage_class.php");
+        exit();
+    } else {
+        echo "Lỗi khi xóa phòng: " . $stmt->error;
     }
+    $stmt->close();
+}
 
-    if (isset($_POST['delete_multiple_class'])) {
-        $all_ma_phong = $_POST['select_all'];
-        $extract_ma_phong = "'" . implode("','", $all_ma_phong) . "'";
-        $sql_delete = "DELETE FROM phongthi WHERE ma_phong in($extract_ma_phong) ";
-        if ($conn->query($sql_delete) === TRUE) {
-            
-            header("Location: manage_class.php");
-            exit();
-        } else {
-            echo "Lỗi khi xóa phòng: " . $conn->error;
-        } 
+if (isset($_POST['delete_multiple_class'])) {
+    $all_ma_phong = $_POST['select_all'];
+    $placeholders = implode(',', array_fill(0, count($all_ma_phong), '?'));
+    $stmt = $conn->prepare("DELETE FROM phongthi WHERE ma_phong IN ($placeholders)");
+    $stmt->bind_param(str_repeat("s", count($all_ma_phong)), ...$all_ma_phong);
+    if ($stmt->execute()) {
+        header("Location: manage_class.php");
+        exit();
+    } else {
+        echo "Lỗi khi xóa phòng: " . $stmt->error;
     }
+    $stmt->close();
+}
 
 // Xóa học phần
-    if (isset($_GET['ma_hoc_phan'])) {
-        $ma_hoc_phan = $_GET['ma_hoc_phan'];
-    
-        $sql_delete = "DELETE FROM hocphan WHERE ma_hoc_phan = '$ma_hoc_phan'";
-    
-        if ($conn->query($sql_delete) === TRUE) {
-            
-            header("Location: manage_course.php");
-            exit();
-        } else {
-            echo "Lỗi khi xóa học phần: " . $conn->error;
-        }
+if (isset($_GET['ma_hoc_phan'])) {
+    $stmt = $conn->prepare("DELETE FROM hocphan WHERE ma_hoc_phan = ?");
+    $stmt->bind_param("s", $_GET['ma_hoc_phan']);
+    if ($stmt->execute()) {
+        header("Location: manage_course.php");
+        exit();
+    } else {
+        echo "Lỗi khi xóa học phần: " . $stmt->error;
     }
+    $stmt->close();
+}
 
-    if (isset($_POST['delete_multiple_course'])) {
-        $all_ma_hoc_phan = $_POST['select_all'];
-        $extract_ma_hoc_phan = implode(',', $all_ma_hoc_phan) ;
-        $sql_delete = "DELETE FROM hocphan WHERE ma_hoc_phan in($extract_ma_hoc_phan) ";
-        if ($conn->query($sql_delete) === TRUE) {
-            
-            header("Location: manage_course.php");
-            exit();
-        } else {
-            echo "Lỗi khi xóa phòng: " . $conn->error;
-        } 
+if (isset($_POST['delete_multiple_course'])) {
+    $all_ma_hoc_phan = $_POST['select_all'];
+    $placeholders = implode(',', array_fill(0, count($all_ma_hoc_phan), '?'));
+    $stmt = $conn->prepare("DELETE FROM hocphan WHERE ma_hoc_phan IN ($placeholders)");
+    $stmt->bind_param(str_repeat("s", count($all_ma_hoc_phan)), ...$all_ma_hoc_phan);
+    if ($stmt->execute()) {
+        header("Location: manage_course.php");
+        exit();
+    } else {
+        echo "Lỗi khi xóa học phần: " . $stmt->error;
     }
+    $stmt->close();
+}
 ?>

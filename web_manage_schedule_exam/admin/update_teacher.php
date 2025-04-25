@@ -9,31 +9,45 @@
             $khoa = $_POST['khoa'];
             $ngay_sinh = $_POST['ngay_sinh'];
             $gioi_tinh = $_POST['gioi_tinh'];  
-    
-            // Cập nhật dữ liệu vào bảng
-            $sql_giang_vien = "UPDATE giangvien set ho_dem = '$ho_dem', ten = '$ten', khoa = '$khoa', ngay_sinh = '$ngay_sinh', gioi_tinh = '$gioi_tinh'WHERE mgv = '$mgv'";         
 
-            if ($conn->query($sql_giang_vien) === TRUE ) {
-                header("Location:manage_teacher.php");
-                exit();
+            // Use prepared statement to prevent SQL injection
+            $sql_giang_vien = "UPDATE giangvien SET ho_dem = ?, ten = ?, khoa = ?, ngay_sinh = ?, gioi_tinh = ? WHERE mgv = ?";
+            if ($stmt = $conn->prepare($sql_giang_vien)) {
+                // Bind the parameters to the prepared statement
+                $stmt->bind_param("ssssss", $ho_dem, $ten, $khoa, $ngay_sinh, $gioi_tinh, $mgv);
+
+                // Execute the statement
+                if ($stmt->execute()) {
+                    header("Location: manage_teacher.php");
+                    exit();
+                } else {
+                    echo "Error: " . $stmt->error;
+                }
+
+                $stmt->close(); // Close the statement after execution
             } else {
-                echo "Error: " . $sql_giang_vien . "<br>" . $conn->error;
+                echo "Error preparing statement: " . $conn->error;
             }
-            
         }
     }
 
-    $sql_giang_vien = "SELECT * FROM giangvien WHERE mgv = '$mgv'";
-    $result_giang_vien = $conn->query($sql_giang_vien);
-    if ($result_giang_vien->num_rows > 0) {
-        $stt = 1;
-        while($row = $result_giang_vien->fetch_assoc()) {
-            $ho_dem = $row["ho_dem"];
-            $ten = $row["ten"];
-            $khoa = $row["khoa"];
-            $ngay_sinh = $row["ngay_sinh"];
-            $gioi_tinh = $row["gioi_tinh"];
+    // Use prepared statement to fetch teacher data
+    $sql_giang_vien = "SELECT * FROM giangvien WHERE mgv = ?";
+    if ($stmt = $conn->prepare($sql_giang_vien)) {
+        // Bind the 'mgv' parameter
+        $stmt->bind_param("s", $mgv);  
+        $stmt->execute();
+        $result_giang_vien = $stmt->get_result();
+        if ($result_giang_vien->num_rows > 0) {
+            while ($row = $result_giang_vien->fetch_assoc()) {
+                $ho_dem = $row["ho_dem"];
+                $ten = $row["ten"];
+                $khoa = $row["khoa"];
+                $ngay_sinh = $row["ngay_sinh"];
+                $gioi_tinh = $row["gioi_tinh"];
+            }
         }
+        $stmt->close(); // Close the statement after fetching data
     }
 ?>
 <!DOCTYPE html>
@@ -63,23 +77,10 @@
                 <input type="date" id="ngay_sinh" name="ngay_sinh" value = "<?php echo $ngay_sinh; ?>">
             </div>
             <div class="gender">
-                <?php 
-                    $sql_giang_vien = "SELECT * FROM giangvien WHERE mgv = '$mgv'";
-                    $result_giang_vien = $conn->query($sql_giang_vien);
-                    $pass_giang_vien = $result_giang_vien->fetch_assoc();
-                    echo '<input type="radio" id="male" name="gioi_tinh" value="Nam"';
-                    if ($pass_giang_vien['gioi_tinh'] ==  "Nam") {
-                        echo ' checked';
-                    } 
-                    echo '>';
-                    echo '<label for="male" >Nam</label>';
-                    echo '<input type="radio" id="female" name="gioi_tinh" value="Nữ"';
-                    if ($pass_giang_vien['gioi_tinh'] ==  "Nữ") {
-                        echo ' checked';
-                    }
-                    echo '>';
-                    echo '<label for="female">Nữ</label><br>';
-                ?>         
+                <input type="radio" id="male" name="gioi_tinh" value="Nam" <?php if ($gioi_tinh == "Nam") echo 'checked'; ?>>
+                <label for="male" >Nam</label>
+                <input type="radio" id="female" name="gioi_tinh" value="Nữ" <?php if ($gioi_tinh == "Nữ") echo 'checked'; ?>>
+                <label for="female">Nữ</label><br>
             </div>
             <br>
             <button type="submit">Cập nhật</button>
