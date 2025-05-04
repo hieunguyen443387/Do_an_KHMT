@@ -130,6 +130,7 @@ $stmt->close();
                         <th>Tên môn học</th>
                         <th>Lịch thi</th>
                         <th>Ngày đăng ký</th>
+                        <th>Xóa đăng ký</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -154,6 +155,7 @@ $stmt->close();
                             echo '<td>' . $row["ten_hoc_phan"] . '</td>';
                             echo '<td data-value="'. $row['ma_lich_thi'] .'">' . $ngay_thi_update . ' từ ' . $row["gio_bat_dau"] . ' - ' . $row["gio_ket_thuc"] . ', Ph '. $row["ma_phong"] .'</td>';
                             echo '<td>' . $row["ngay_dang_ky"] . '</td>';
+                            echo '<td><a href="delete.php?msv=' . urlencode($msv) . '&ma_lich_thi=' . urlencode($row['ma_lich_thi']) . '"><i id="delete-icon" class="fa-solid fa-trash-can"></i></a></td>';
                             echo '</tr>';
                         }
 

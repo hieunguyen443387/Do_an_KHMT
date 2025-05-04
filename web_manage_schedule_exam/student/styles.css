@@ -183,7 +183,7 @@ html, body {
     background-color: #ececec;
 }
 
-.schedule-table .delete-icon {
+.schedule-table #delete-icon {
     color: red;
     cursor: pointer;
 }

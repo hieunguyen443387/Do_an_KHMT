@@ -85,7 +85,14 @@
                                 echo '</tr>';  
                             }
                         } else {
-                            echo "Chưa có giảng viên";
+                            // Nếu không có giảng viên nào, hiển thị thông báo      
+                            echo '<tr>
+                                <td colspan="10" style="text-align: center; padding: 20px; font-style: italic; color: #777;">
+                                    <div style="display: inline-block; padding: 10px 20px; border-radius: 10px;">
+                                        Chưa có giảng viên
+                                    </div>
+                                </td>';
+                            echo '</tr>';
                         }
 
                         $stmt->close();

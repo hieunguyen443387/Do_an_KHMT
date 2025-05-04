@@ -34,11 +34,22 @@
                     $ngay_bat_dau = $_POST['ngay_bat_dau'];
                     $ngay_ket_thuc = $_POST['ngay_ket_thuc'];
 
+                    // Kiểm tra xem bảng cauhinh_dangky có dữ liệu không
+                    $result = $conn->query("SELECT * FROM cauhinh_dangky LIMIT 1");
+                    if ($result->num_rows > 0) {
+                        // Nếu có dữ liệu, xóa dữ liệu cũ
+                        $stmt = $conn->prepare("DELETE FROM cauhinh_dangky");
+                        $stmt->execute();
+                    }
+
+                    // Kiểm tra xem ngày bắt đầu có trước ngày kết thúc không
                     if ($ngay_bat_dau <= $ngay_ket_thuc) {
+                        // Thêm cấu hình thời gian đăng ký mới
                         $stmt = $conn->prepare("INSERT INTO cauhinh_dangky (ngay_bat_dau, ngay_ket_thuc) VALUES (?, ?)");
                         $stmt->bind_param("ss", $ngay_bat_dau, $ngay_ket_thuc);
                         if ($stmt->execute()) {
-                            echo "<p style='color:green;'>Đã lưu cấu hình thời gian đăng ký.</p>";
+                            header("Location: " . $_SERVER['PHP_SELF']);
+                            exit;
                         } else {
                             echo "<p style='color:red;'>Có lỗi xảy ra.</p>";
                         }
@@ -49,11 +60,12 @@
                 }
 
                 // Hiển thị cấu hình hiện tại
-                $result = $conn->query("SELECT * FROM cauhinh_dangky ORDER BY id DESC LIMIT 1");
+                $result = $conn->query("SELECT * FROM cauhinh_dangky");
                 if ($row = $result->fetch_assoc()) {
                     echo "<p> Thời gian đăng ký hiện tại: <strong>" . $row['ngay_bat_dau'] . "</strong> đến <strong>" . $row['ngay_ket_thuc'] . "</strong></p>";
                 }
             ?>
+
         </div>
             <h3>Danh sách học phần:</h3>
             <div class="button-group">
@@ -137,7 +149,13 @@
                                 echo '</tr>';  
                             }
                         } else {
-                            echo "Chưa có lịch thi";
+                            echo '<tr>
+                                <td colspan="10" style="text-align: center; padding: 20px; font-style: italic; color: #777;">
+                                    <div style="display: inline-block; padding: 10px 20px; border-radius: 10px;">
+                                        Chưa có lịch thi
+                                    </div>
+                                </td>
+                            </tr>';
                         }                        
                     ?>
 

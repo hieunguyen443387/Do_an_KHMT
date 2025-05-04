@@ -1,6 +1,22 @@
 <?php 
     include('config.php'); 
     session_start();
+    $sql_cauhinh = "SELECT ngay_bat_dau, ngay_ket_thuc FROM cauhinh_dangky LIMIT 1";
+    $stmt_cauhinh = $conn->prepare($sql_cauhinh);
+    $stmt_cauhinh->execute();
+    $result_cauhinh = $stmt_cauhinh->get_result();
+
+    if ($result_cauhinh && $result_cauhinh->num_rows > 0) {
+        $row_cauhinh = $result_cauhinh->fetch_assoc();
+        $ngay_bat_dau = $row_cauhinh['ngay_bat_dau'];
+        $ngay_ket_thuc = $row_cauhinh['ngay_ket_thuc'];
+    } else {
+        $ngay_bat_dau = '';
+        $ngay_ket_thuc = '';
+    }
+
+    $stmt_cauhinh->close();
+    
     if (!isset($_SESSION['id_admin'])) {
         header("Location: ../home_admin/home_admin.html");
         exit();
@@ -146,7 +162,7 @@
                     ?>
                 </select>
 
-                <input type="date" id="ngay_thi" name="ngay_thi" placeholder="Ngày thi" value="<?php echo htmlspecialchars($ngay_thi); ?>" required>
+                <input type="date" id="ngay_thi" name="ngay_thi" placeholder="Ngày thi" value="<?php echo htmlspecialchars($ngay_thi); ?>" min="<?php echo $ngay_bat_dau; ?>" max="<?php echo $ngay_ket_thuc; ?>" required>
             </div>
 
             <div class="exam-time">

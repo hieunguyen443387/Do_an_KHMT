@@ -72,7 +72,13 @@
                                 echo '</tr>';  
                             }
                         } else {
-                            echo "Chưa có phòng thi";
+                            echo '<tr>
+                                <td colspan="10" style="text-align: center; padding: 20px; font-style: italic; color: #777;">
+                                    <div style="display: inline-block; padding: 10px 20px; border-radius: 10px;">
+                                        Chưa có phòng thi
+                                    </div>
+                                </td>
+                            </tr>';
                         }     
                         $stmt->close();                   
                     ?>
