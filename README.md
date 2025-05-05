@@ -23,7 +23,7 @@ Dự án xây dựng một hệ thống web giúp sinh viên đăng ký lịch t
 
 - **Quản lý phòng thi**
   - Tự động phân bổ phòng dựa theo số lượng sinh viên.
-  - 
+
 - **Quản lý sinh viên, giảng viên, học phần sẽ thi **
   - CRUD sinh viên, giảng viên, học phần sẽ thi, có thể import danh sách từ file 
 
