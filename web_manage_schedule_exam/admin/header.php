@@ -62,6 +62,14 @@
                 myDropdown.classList.remove("show");
             }
         };   
+
+        function confirmDelete(identifier) {
+            return confirm("Bạn có chắc chắn muốn xóa: " + identifier + " không?");
+        }
+        
+        function confirmDeleteAll() {
+            return confirm("Bạn có chắc chắn muốn xóa toàn bộ không?");
+        }
         
     </script>
 </body>

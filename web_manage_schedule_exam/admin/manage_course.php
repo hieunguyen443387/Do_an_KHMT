@@ -72,7 +72,7 @@
                                     echo '<td>' . $ten_hoc_phan . '</td>';
                                     echo '<td>' . $so_tin_chi . '</td>';
                                     echo '<td id="update-icon"><a href="update_course.php?ma_hoc_phan=' . urlencode($ma_hoc_phan) . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
-                                    echo '<td id="delete-icon"><a href="delete.php?ma_hoc_phan=' . urlencode($ma_hoc_phan) . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
+                                    echo '<td id="delete-icon"><a href="delete.php?ma_hoc_phan=' . urlencode($ma_hoc_phan) . '" onclick="return confirmDelete(\'' . $ma_hoc_phan . '\')"><i class="fa-solid fa-trash-can"></i></a></td>';   
                                     echo '</tr>';  
                                 }
                             } else {
@@ -94,7 +94,7 @@
                 if ($result_hoc_phan->num_rows > 0) {
                     echo '<div class="selected-box">
                             <span> Chọn tất cả <input type="checkbox" onClick="toggle(this)" /></span>
-                                <button type="submit" name="delete_multiple_course"><i class="fa-solid fa-trash-can"></i></button>
+                                <button type="submit" name="delete_multiple_course" onclick="return confirmDeleteAll()"><i class="fa-solid fa-trash-can"></i></button>
                             </form>
                         </div>';
                 }

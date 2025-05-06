@@ -81,7 +81,7 @@
                                 echo '<td>' . $khoa . '</td>';
                                 echo '<td>' . $gioi_tinh . '</td>';
                                 echo '<td id="update-icon"><a href="update_teacher.php?mgv=' . urlencode($mgv) . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
-                                echo '<td id="delete-icon"><a href="delete.php?mgv=' . urlencode($mgv) . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
+                                echo '<td id="delete-icon"><a href="delete.php?mgv=' . urlencode($mgv) . '" onclick="return confirmDelete(\'' . $mgv . '\')"><i class="fa-solid fa-trash-can"></i></a></td>';
                                 echo '</tr>';  
                             }
                         } else {
@@ -106,7 +106,7 @@
                 if ($result_giang_vien->num_rows > 0) {
                     echo '<div class="selected-box">
                             <span> Chọn tất cả <input type="checkbox" onClick="toggle(this)" /></span>
-                                <button type="submit" name="delete_multiple_teacher"><i class="fa-solid fa-trash-can"></i></button>
+                                <button type="submit" name="delete_multiple_teacher" onclick="return confirmDeleteAll()"><i class="fa-solid fa-trash-can"></i></button>
                             </form>
                         </div>';
                 }

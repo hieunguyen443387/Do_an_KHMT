@@ -68,7 +68,7 @@
                                 echo '<td>' . $ma_phong . '</td>';
                                 echo '<td>' . $suc_chua . '</td>';
                                 echo '<td id="update-icon"><a href="update_class.php?ma_phong=' . urlencode($ma_phong) . '"><i class="fa-solid fa-pen-to-square"></i></a></td>';
-                                echo '<td id="delete-icon"><a href="delete.php?ma_phong=' . urlencode($ma_phong) . '"><i class="fa-solid fa-trash-can"></i></a></td>';   
+                                echo '<td id="delete-icon"><a href="delete.php?ma_phong=' . urlencode($ma_phong) . '" onclick="return confirmDelete(\'' . $ma_phong . '\')"><i class="fa-solid fa-trash-can"></i></a></td>';
                                 echo '</tr>';  
                             }
                         } else {
@@ -90,7 +90,7 @@
                 if ($result_phong_thi->num_rows > 0) {
                     echo '<div class="selected-box">
                             <span> Chọn tất cả <input type="checkbox" onClick="toggle(this)" /></span>
-                                <button type="submit" name="delete_multiple_class"><i class="fa-solid fa-trash-can"></i></button>
+                                <button type="submit" name="delete_multiple_class" onclick="return confirmDeleteAll()"><i class="fa-solid fa-trash-can"></i></button>
                             </form>
                         </div>';
                 }
