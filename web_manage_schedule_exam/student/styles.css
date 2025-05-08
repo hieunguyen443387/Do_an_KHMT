@@ -208,6 +208,25 @@ html, body {
 .schedule .export-schedule-button i {
     font-size: 16px;
 }
+.error-message {
+    margin: 20px auto;
+    padding: 15px 25px;
+    background-color: #ffdddd;
+    color: #d8000c;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    width: fit-content;
+    font-weight: bold;
+    animation: fadeIn 0.4s ease;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 
 /* *******************FOOTER*********************** */
 .footer {

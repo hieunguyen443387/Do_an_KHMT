@@ -15,6 +15,117 @@ if ($row = $result->fetch_assoc()) {
 }
 $stmt->close();
 ?> 
+
+<?php 
+include('config.php'); 
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $ma_lich_thi_list = $_POST['ma_lich_thi'];
+    $msv = $_POST['msv'];
+
+    foreach ($ma_lich_thi_list as $ma_lich_thi) {
+
+        // Lấy thông tin thời gian của lịch thi hiện tại
+        $stmt_get_time = $conn->prepare("SELECT ngay_thi, gio_bat_dau, gio_ket_thuc FROM lichthi WHERE ma_lich_thi = ?");
+        $stmt_get_time->bind_param("s", $ma_lich_thi);
+        $stmt_get_time->execute();
+        $result_time = $stmt_get_time->get_result();
+        if ($result_time->num_rows > 0) {
+            $row_time = $result_time->fetch_assoc();
+            $ngay_thi_new = $row_time['ngay_thi'];
+            $gio_bat_dau_new = $row_time['gio_bat_dau'];
+            $gio_ket_thuc_new = $row_time['gio_ket_thuc'];
+        }
+        $stmt_get_time->close();
+
+        // Kiểm tra xem có lịch thi nào khác bị trùng thời gian không
+        $stmt_conflict_time = $conn->prepare("
+            SELECT lichthi.ma_lich_thi 
+            FROM dangkythi 
+            JOIN lichthi ON dangkythi.ma_lich_thi = lichthi.ma_lich_thi 
+            WHERE dangkythi.msv = ? 
+            AND lichthi.ngay_thi = ?
+            AND (
+                (lichthi.gio_bat_dau < ? AND lichthi.gio_ket_thuc > ?) OR
+                (lichthi.gio_bat_dau >= ? AND lichthi.gio_bat_dau < ?)
+            )
+        ");
+        $stmt_conflict_time->bind_param("ssssss", $msv, $ngay_thi_new, $gio_ket_thuc_new, $gio_bat_dau_new, $gio_bat_dau_new, $gio_ket_thuc_new);
+        $stmt_conflict_time->execute();
+        $result_conflict_time = $stmt_conflict_time->get_result();
+
+        if ($result_conflict_time->num_rows > 0) {
+            echo '<div class="error-message">⚠️ Trùng thời gian thi với một lịch thi khác!</div>';
+            $stmt_conflict_time->close();
+            continue;
+        }
+        $stmt_conflict_time->close();
+
+        // Kiểm tra đã đăng ký chưa
+        $stmt_check = $conn->prepare("SELECT * FROM dangkythi WHERE ma_lich_thi = ? AND msv = ?");
+        $stmt_check->bind_param("ss", $ma_lich_thi, $msv);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
+
+        if ($result_check->num_rows > 0) {
+            echo "Lịch thi $ma_lich_thi đã tồn tại!";
+            $stmt_check->close();
+            continue;
+        }
+        $stmt_check->close();
+
+        // Lấy mã học phần từ lịch thi
+        $stmt_get_hp = $conn->prepare("SELECT ma_hoc_phan FROM lichthi WHERE ma_lich_thi = ?");
+        $stmt_get_hp->bind_param("s", $ma_lich_thi);
+        $stmt_get_hp->execute();
+        $result_hp = $stmt_get_hp->get_result();
+
+        if ($result_hp->num_rows > 0) {
+            $row = $result_hp->fetch_assoc();
+            $ma_hoc_phan = $row['ma_hoc_phan'];
+            $stmt_get_hp->close();
+
+            // Kiểm tra xung đột mã học phần
+            $stmt_conflict = $conn->prepare("
+                SELECT dangkythi.ma_lich_thi 
+                FROM dangkythi 
+                JOIN lichthi ON dangkythi.ma_lich_thi = lichthi.ma_lich_thi 
+                WHERE dangkythi.msv = ? AND lichthi.ma_hoc_phan = ?
+            ");
+            $stmt_conflict->bind_param("ss", $msv, $ma_hoc_phan);
+            $stmt_conflict->execute();
+            $result_conflict = $stmt_conflict->get_result();
+
+            if ($result_conflict->num_rows > 0) {
+                $row_conflict = $result_conflict->fetch_assoc();
+                $ma_lich_thi_old = $row_conflict['ma_lich_thi'];
+                $stmt_conflict->close();
+
+                // Cập nhật lịch thi mới
+                $stmt_update = $conn->prepare("UPDATE dangkythi SET ma_lich_thi = ? WHERE ma_lich_thi = ? AND msv = ?");
+                $stmt_update->bind_param("sss", $ma_lich_thi, $ma_lich_thi_old, $msv);
+                if (!$stmt_update->execute()) {
+                    echo "Lỗi cập nhật: " . $stmt_update->error;
+                }
+                $stmt_update->close();
+            } else {
+                $stmt_conflict->close();
+
+                // Chèn lịch thi mới nếu không có xung đột
+                $stmt_insert = $conn->prepare("INSERT INTO dangkythi (ma_lich_thi, msv) VALUES (?, ?)");
+                $stmt_insert->bind_param("ss", $ma_lich_thi, $msv);
+                if (!$stmt_insert->execute()) {
+                    echo "Lỗi: " . $stmt_insert->error;
+                }
+                $stmt_insert->close();
+            }
+        } else {
+            $stmt_get_hp->close();
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -43,7 +154,7 @@ $stmt->close();
             </select>
 
             <h3>Danh sách lịch thi:</h3>
-            <form action="course_registration.php" method="post">
+            <form action="home_student.php" method="post">
                 <table class="schedule-table">
                     <thead>
                         <tr>
